@@ -5,17 +5,139 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>true_lock Projects</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Base styles */
+    :root {
+      --bg-color: #f5f5f5;
+      --text-color: #333;
+      --card-bg: #fff;
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --link-color: #007BFF;
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #f5f5f5;
+      --card-bg: #1e1e1e;
+      --card-shadow: rgba(255, 255, 255, 0.1);
+      --link-color: #80b3ff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem;
+      background-color: var(--card-bg);
+      box-shadow: 0px 4px 8px var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: var(--link-color);
+    }
+
+    #projects {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    #repo-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .repo {
+      background-color: var(--card-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0px 4px 6px var(--card-shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .repo:hover {
+      transform: translateY(-5px);
+      box-shadow: 0px 6px 12px var(--card-shadow);
+    }
+
+    .repo h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .repo a {
+      color: var(--link-color);
+      text-decoration: none;
+    }
+
+    .repo p {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .dark-mode-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background-color: var(--card-bg);
+      border: none;
+      color: var(--text-color);
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0px 4px 6px var(--card-shadow);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .dark-mode-toggle:hover {
+      background-color: var(--link-color);
+      color: var(--bg-color);
+    }
+  </style>
 </head>
 <body>
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
   <header>
-    <h1>Welcome to my website :=)</h1>
+    <h1>Welcome to my website 😊</h1>
     <p>Discover very cool Stuff</p>
   </header>
+
   <section id="projects">
     <h2>My GitHub Repositories</h2>
     <div id="repo-container"></div>
   </section>
+
   <script>
+    // Dark mode toggle function
+    function toggleDarkMode() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    // Apply saved theme on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    });
+
     // Fetch repos from GitHub
     fetch('https://api.github.com/users/truelockmc/repos')
       .then(response => response.json())
@@ -34,4 +156,3 @@
   </script>
 </body>
 </html>
-``
