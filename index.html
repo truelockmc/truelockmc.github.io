@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>true_lock Projects</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to my website :=)</h1>
+    <p>Discover very cool Stuff</p>
+  </header>
+  <section id="projects">
+    <h2>My GitHub Repositories</h2>
+    <div id="repo-container"></div>
+  </section>
+  <script>
+    // Fetch repos from GitHub
+    fetch('https://api.github.com/users/truelockmc/repos')
+      .then(response => response.json())
+      .then(data => {
+        const repoContainer = document.getElementById('repo-container');
+        data.forEach(repo => {
+          const repoDiv = document.createElement('div');
+          repoDiv.classList.add('repo');
+          repoDiv.innerHTML = `
+            <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+            <p>${repo.description || 'No description available'}</p>
+          `;
+          repoContainer.appendChild(repoDiv);
+        });
+      });
+  </script>
+</body>
+</html>
+``
