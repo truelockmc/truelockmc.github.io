@@ -3843,12 +3843,13 @@ window.onload = () => {
         ],
         "flagUrl": "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/zw.svg"
     }
-]
+];
 
 
 let correctAnswers = 0;
 let incorrectAnswers = 0;
 
+// Diese Funktion mischt die Flaggen-Daten
 function shuffleFlags() {
     for (let i = flagData.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -3856,6 +3857,7 @@ function shuffleFlags() {
     }
 }
 
+// Diese Funktion zeigt die nächste Frage an
 function displayQuestion() {
     const feedback = document.getElementById('feedback');
     const countryInput = document.getElementById('country-input');
@@ -3878,14 +3880,17 @@ function displayQuestion() {
     });
 }
 
+// Event-Listener für den Easy-Modus Button
 document.getElementById('easy-mode').addEventListener('click', function() {
     startEasyMode();
 });
 
+// Event-Listener für den Difficult-Modus Button
 document.getElementById('difficult-mode').addEventListener('click', function() {
     startDifficultMode();
 });
 
+// Funktion zum Starten des Easy-Modus
 function startEasyMode() {
     const quizContainer = document.getElementById('quiz-container');
     quizContainer.innerHTML = '';
@@ -3897,6 +3902,7 @@ function startEasyMode() {
     }
 }
 
+// Funktion zum Starten des Difficult-Modus
 function startDifficultMode() {
     const quizContainer = document.getElementById('quiz-container');
     quizContainer.innerHTML = `
@@ -3913,7 +3919,6 @@ function startDifficultMode() {
     const flagImage = document.getElementById('flag-image');
     const countryInput = document.getElementById('country-input');
     const submitBtn = document.getElementById('submit-btn');
-    const feedback = document.getElementById('feedback');
 
     const currentQuestion = getRandomFlag();
     flagImage.src = currentQuestion.flagUrl;
@@ -3921,6 +3926,7 @@ function startDifficultMode() {
     submitBtn.onclick = () => checkAnswer(countryInput.value, currentQuestion.country);
 }
 
+// Funktion, die eine Flagge mit mehreren Länderwahlmöglichkeiten anzeigt
 function showFlagWithCountryChoices(container) {
     const flag = getRandomFlag();
     container.innerHTML = `<img src="${flag.flagUrl}" alt="Flagge" />`;
@@ -3937,6 +3943,7 @@ function showFlagWithCountryChoices(container) {
     });
 }
 
+// Funktion, die ein Land mit mehreren Flaggenwahlmöglichkeiten anzeigt
 function showCountryWithFlagChoices(container) {
     const flag = getRandomFlag();
     container.innerHTML = `<p>${flag.country[1]}</p>`;
@@ -3953,10 +3960,12 @@ function showCountryWithFlagChoices(container) {
     });
 }
 
+// Funktion, um eine zufällige Flagge aus den Daten auszuwählen
 function getRandomFlag() {
     return flagData[Math.floor(Math.random() * flagData.length)];
 }
 
+// Funktion, um die Auswahlmöglichkeiten für Länder zu erhalten
 function getCountryChoices(correctCountry) {
     const choices = [correctCountry];
     while (choices.length < 4) {
@@ -3968,6 +3977,7 @@ function getCountryChoices(correctCountry) {
     return shuffle(choices);
 }
 
+// Funktion, um die Auswahlmöglichkeiten für Flaggen zu erhalten
 function getFlagChoices(correctFlag) {
     const choices = [correctFlag];
     while (choices.length < 4) {
@@ -3979,6 +3989,7 @@ function getFlagChoices(correctFlag) {
     return shuffle(choices);
 }
 
+// Funktion, um ein Array zu mischen
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -3987,14 +3998,38 @@ function shuffle(array) {
     return array;
 }
 
-function checkAnswer(selected, correct) {
-    if (selected === correct) {
-        alert('Correct!');
+// Funktion, um die Antwort zu überprüfen
+function checkAnswer(input, correctCountry) {
+    const feedback = document.getElementById('feedback');
+    const countryInput = document.getElementById('country-input');
+    const correctCount = document.getElementById('correct-count');
+    const incorrectCount = document.getElementById('incorrect-count');
+
+    const inputNormalized = input.trim().toLowerCase();
+    const correctAnswer = correctCountry.some((name) => name.toLowerCase() === inputNormalized);
+
+    if (correctAnswer) {
+        correctAnswers++;
+        correctCount.textContent = correctAnswers;
+        feedback.textContent = 'Richtig! 😊';
+        feedback.classList.remove('wrong-feedback');
+        feedback.classList.add('correct-feedback');
+        feedback.style.display = 'block';
     } else {
-        alert('Wrong!');
+        incorrectAnswers++;
+        incorrectCount.textContent = incorrectAnswers;
+        feedback.textContent = `Falsch! Die richtige Antwort ist: ${correctCountry[0]} 😞`;
+        feedback.classList.remove('correct-feedback');
+        feedback.classList.add('wrong-feedback');
+        feedback.style.display = 'block';
     }
+
+    setTimeout(() => {
+        displayQuestion();
+    }, 1500);
 }
 
+// Funktion, um den Dunkelmodus umzuschalten
 function toggleDarkMode() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -4002,6 +4037,7 @@ function toggleDarkMode() {
     localStorage.setItem('theme', newTheme);
 }
 
+// Initialisierungsfunktion, die beim Laden der Seite ausgeführt wird
 window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
