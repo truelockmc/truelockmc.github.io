@@ -3555,7 +3555,7 @@ function checkAnswer(input, correctCountry) {
     // Gehe zur nächsten Frage nach einer Verzögerung
     setTimeout(() => {
         displayQuestion(); // Zeige die nächste Flagge
-    }, 2000); // Verzögerung von 2 Sekunden
+    }, 1500); // Verzögerung von 2 Sekunden
 }
 
 function toggleDarkMode() {
