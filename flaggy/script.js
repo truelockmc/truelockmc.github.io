@@ -1,361 +1,4 @@
-
-let correctAnswers = 0;
-let incorrectAnswers = 0;
-
-function shuffleFlags() {
-    for (let i = flagData.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [flagData[i], flagData[j]] = [flagData[j], flagData[i]];
-    }
-}
-
-function displayQuestion() {
-    const feedback = document.getElementById('feedback');
-    const countryInput = document.getElementById('country-input');
-    const flagImage = document.getElementById('flag-image');
-    const submitBtn = document.getElementById('submit-btn');
-
-    feedback.style.display = 'none';
-    countryInput.value = '';
-    countryInput.focus();
-
-    const randomIndex = Math.floor(Math.random() * flagData.length);
-    const currentQuestion = flagData[randomIndex];
-    flagImage.src = currentQuestion.flagUrl;
-
-    submitBtn.onclick = () => checkAnswer(countryInput.value, currentQuestion.country);
-    countryInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            checkAnswer(countryInput.value, currentQuestion.country);
-        }
-    });
-}
-
-document.getElementById('easy-mode').addEventListener('click', function() {
-    startEasyMode();
-});
-
-document.getElementById('difficult-mode').addEventListener('click', function() {
-    startDifficultMode();
-});
-
-function startEasyMode() {
-    const quizContainer = document.getElementById('quiz-container');
-    quizContainer.innerHTML = '';
-
-    if (Math.random() > 0.5) {
-        showFlagWithCountryChoices(quizContainer);
-    } else {
-        showCountryWithFlagChoices(quizContainer);
-    }
-}
-
-function startDifficultMode() {
-    const quizContainer = document.getElementById('quiz-container');
-    quizContainer.innerHTML = `
-        <div id="flag-image-container">
-            <img id="flag-image" src="" alt="Flagge" />
-        </div>
-        <input type="text" id="country-input" placeholder="Gib das Land ein..." autofocus />
-        <div id="submit-container">
-            <button id="submit-btn" class="answer-button">Antwort Überprüfen</button>
-        </div>
-        <div id="feedback" class="feedback"></div>
-    `;
-
-    const flagImage = document.getElementById('flag-image');
-    const countryInput = document.getElementById('country-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const feedback = document.getElementById('feedback');
-
-    const currentQuestion = getRandomFlag();
-    flagImage.src = currentQuestion.flagUrl;
-
-    submitBtn.onclick = () => checkAnswer(countryInput.value, currentQuestion.country);
-}
-
-function showFlagWithCountryChoices(container) {
-    const flag = getRandomFlag();
-    container.innerHTML = `<img src="${flag.flagUrl}" alt="Flagge" />`;
-
-    const choices = getCountryChoices(flag.country[1]);
-    choices.forEach(choice => {
-        const button = document.createElement('button');
-        button.className = 'answer-button';
-        button.textContent = choice;
-        button.addEventListener('click', function() {
-            checkAnswer(choice, flag.country[1]);
-        });
-        container.appendChild(button);
-    });
-}
-
-function showCountryWithFlagChoices(container) {
-    const flag = getRandomFlag();
-    container.innerHTML = `<p>${flag.country[1]}</p>`;
-
-    const choices = getFlagChoices(flag.flagUrl);
-    choices.forEach(choice => {
-        const button = document.createElement('button');
-        button.className = 'answer-button';
-        button.innerHTML = `<img src="${choice}" alt="Flagge" />`;
-        button.addEventListener('click', function() {
-            checkAnswer(choice, flag.flagUrl);
-        });
-        container.appendChild(button);
-    });
-}
-
-function getRandomFlag() {
-    return flagData[Math.floor(Math.random() * flagData.length)];
-}
-
-function getCountryChoices(correctCountry) {
-    const choices = [correctCountry];
-    while (choices.length < 4) {
-        const country = getRandomFlag().country[1];
-        if (!choices.includes(country)) {
-            choices.push(country);
-        }
-    }
-    return shuffle(choices);
-}
-
-function getFlagChoices(correctFlag) {
-    const choices = [correctFlag];
-    while (choices.length < 4) {
-        const flag = getRandomFlag().flagUrl;
-        if (!choices.includes(flag)) {
-            choices.push(flag);
-        }
-    }
-    return shuffle(choices);
-}
-
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-function checkAnswer(selected, correct) {
-    if (selected === correct) {
-        alert('Correct!');
-    } else {
-        alert('Wrong!');
-    }
-}
-
-function toggleDarkMode() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-}
-
-window.onload = () => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    shuffleFlags();
-    displayQuestion();
-};
-let correctAnswers = 0;
-let incorrectAnswers = 0;
-
-function shuffleFlags() {
-    for (let i = flagData.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [flagData[i], flagData[j]] = [flagData[j], flagData[i]];
-    }
-}
-
-function displayQuestion() {
-    const feedback = document.getElementById('feedback');
-    const countryInput = document.getElementById('country-input');
-    const flagImage = document.getElementById('flag-image');
-    const submitBtn = document.getElementById('submit-btn');
-
-    feedback.style.display = 'none';
-    countryInput.value = '';
-    countryInput.focus();
-
-    const randomIndex = Math.floor(Math.random() * flagData.length);
-    const currentQuestion = flagData[randomIndex];
-    flagImage.src = currentQuestion.flagUrl;
-
-    submitBtn.onclick = () => checkAnswer(countryInput.value, currentQuestion.country);
-    countryInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            checkAnswer(countryInput.value, currentQuestion.country);
-        }
-    });
-}
-
-document.getElementById('easy-mode').addEventListener('click', function() {
-    startEasyMode();
-});
-
-document.getElementById('difficult-mode').addEventListener('click', function() {
-    startDifficultMode();
-});
-
-function startEasyMode() {
-    const quizContainer = document.getElementById('quiz-container');
-    quizContainer.innerHTML = '';
-
-    if (Math.random() > 0.5) {
-        showFlagWithCountryChoices(quizContainer);
-    } else {
-        showCountryWithFlagChoices(quizContainer);
-    }
-}
-
-function startDifficultMode() {
-    const quizContainer = document.getElementById('quiz-container');
-    quizContainer.innerHTML = `
-        <div id="flag-image-container">
-            <img id="flag-image" src="" alt="Flagge" />
-        </div>
-        <input type="text" id="country-input" placeholder="Gib das Land ein..." autofocus />
-        <div id="submit-container">
-            <button id="submit-btn" class="answer-button">Antwort Überprüfen</button>
-        </div>
-        <div id="feedback" class="feedback"></div>
-    `;
-
-    const flagImage = document.getElementById('flag-image');
-    const countryInput = document.getElementById('country-input');
-    const submitBtn = document.getElementById('submit-btn');
-    const feedback = document.getElementById('feedback');
-
-    const currentQuestion = getRandomFlag();
-    flagImage.src = currentQuestion.flagUrl;
-
-    submitBtn.onclick = () => checkAnswer(countryInput.value, currentQuestion.country);
-}
-
-function showFlagWithCountryChoices(container) {
-    const flag = getRandomFlag();
-    container.innerHTML = `<img src="${flag.flagUrl}" alt="Flagge" />`;
-
-    const choices = getCountryChoices(flag.country[1]);
-    choices.forEach(choice => {
-        const button = document.createElement('button');
-        button.className = 'answer-button';
-        button.textContent = choice;
-        button.addEventListener('click', function() {
-            checkAnswer(choice, flag.country[1]);
-        });
-        container.appendChild(button);
-    });
-}
-
-function showCountryWithFlagChoices(container) {
-    const flag = getRandomFlag();
-    container.innerHTML = `<p>${flag.country[1]}</p>`;
-
-    const choices = getFlagChoices(flag.flagUrl);
-    choices.forEach(choice => {
-        const button = document.createElement('button');
-        button.className = 'answer-button';
-        button.innerHTML = `<img src="${choice}" alt="Flagge" />`;
-        button.addEventListener('click', function() {
-            checkAnswer(choice, flag.flagUrl);
-        });
-        container.appendChild(button);
-    });
-}
-
-function getRandomFlag() {
-    return flagData[Math.floor(Math.random() * flagData.length)];
-}
-
-function getCountryChoices(correctCountry) {
-    const choices = [correctCountry];
-    while (choices.length < 4) {
-        const country = getRandomFlag().country[1];
-        if (!choices.includes(country)) {
-            choices.push(country);
-        }
-    }
-    return shuffle(choices);
-}
-
-function getFlagChoices(correctFlag) {
-    const choices = [correctFlag];
-    while (choices.length < 4) {
-        const flag = getRandomFlag().flagUrl;
-        if (!choices.includes(flag)) {
-            choices.push(flag);
-        }
-    }
-    return shuffle(choices);
-}
-
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-function checkAnswer(selected, correct) {
-    if (selected === correct) {
-        alert('Correct!');
-    } else {
-        alert('Wrong!');
-    }
-}
-
-function toggleDarkMode() {
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-}
-
-window.onload = () => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    shuffleFlags();
-    displayQuestion();
-};const flagData = [
-            "Curaçao",
-            "Curaçao"
-        ],
-        flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/cw.svg"
-    },
-    {
-        country: [
-            "Weihnachtsinseln",
-            "Christmas Island"
-        ],
-        flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/cx.svg"
-    },
-    {
-        country: [
-            "Cayman-Inseln",
-            "Cayman Islands"
-        ],
-        flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/ky.svg"
-    },
-    {
-        country: [
-            "Zypern",
-            "Cyprus"
-        ],
-        flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/cy.svg"
-    },
-    {
-        country: [
-            "Tschechien",
-            "Czechia"
-        ],
-        flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/cz.svg"
-    },const flagData = [
+const flagData = [
     {
         country: [
             "Aruba",
@@ -3845,11 +3488,9 @@ window.onload = () => {
     }
 ];
 
-
 let correctAnswers = 0;
 let incorrectAnswers = 0;
 
-// Diese Funktion mischt die Flaggen-Daten
 function shuffleFlags() {
     for (let i = flagData.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -3857,7 +3498,6 @@ function shuffleFlags() {
     }
 }
 
-// Diese Funktion zeigt die nächste Frage an
 function displayQuestion() {
     const feedback = document.getElementById('feedback');
     const countryInput = document.getElementById('country-input');
@@ -3880,17 +3520,14 @@ function displayQuestion() {
     });
 }
 
-// Event-Listener für den Easy-Modus Button
 document.getElementById('easy-mode').addEventListener('click', function() {
     startEasyMode();
 });
 
-// Event-Listener für den Difficult-Modus Button
 document.getElementById('difficult-mode').addEventListener('click', function() {
     startDifficultMode();
 });
 
-// Funktion zum Starten des Easy-Modus
 function startEasyMode() {
     const quizContainer = document.getElementById('quiz-container');
     quizContainer.innerHTML = '';
@@ -3902,7 +3539,6 @@ function startEasyMode() {
     }
 }
 
-// Funktion zum Starten des Difficult-Modus
 function startDifficultMode() {
     const quizContainer = document.getElementById('quiz-container');
     quizContainer.innerHTML = `
@@ -3926,7 +3562,6 @@ function startDifficultMode() {
     submitBtn.onclick = () => checkAnswer(countryInput.value, currentQuestion.country);
 }
 
-// Funktion, die eine Flagge mit mehreren Länderwahlmöglichkeiten anzeigt
 function showFlagWithCountryChoices(container) {
     const flag = getRandomFlag();
     container.innerHTML = `<img src="${flag.flagUrl}" alt="Flagge" />`;
@@ -3943,7 +3578,6 @@ function showFlagWithCountryChoices(container) {
     });
 }
 
-// Funktion, die ein Land mit mehreren Flaggenwahlmöglichkeiten anzeigt
 function showCountryWithFlagChoices(container) {
     const flag = getRandomFlag();
     container.innerHTML = `<p>${flag.country[1]}</p>`;
@@ -3960,12 +3594,10 @@ function showCountryWithFlagChoices(container) {
     });
 }
 
-// Funktion, um eine zufällige Flagge aus den Daten auszuwählen
 function getRandomFlag() {
     return flagData[Math.floor(Math.random() * flagData.length)];
 }
 
-// Funktion, um die Auswahlmöglichkeiten für Länder zu erhalten
 function getCountryChoices(correctCountry) {
     const choices = [correctCountry];
     while (choices.length < 4) {
@@ -3977,7 +3609,6 @@ function getCountryChoices(correctCountry) {
     return shuffle(choices);
 }
 
-// Funktion, um die Auswahlmöglichkeiten für Flaggen zu erhalten
 function getFlagChoices(correctFlag) {
     const choices = [correctFlag];
     while (choices.length < 4) {
@@ -3989,7 +3620,6 @@ function getFlagChoices(correctFlag) {
     return shuffle(choices);
 }
 
-// Funktion, um ein Array zu mischen
 function shuffle(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -3998,38 +3628,28 @@ function shuffle(array) {
     return array;
 }
 
-// Funktion, um die Antwort zu überprüfen
-function checkAnswer(input, correctCountry) {
+function checkAnswer(selected, correct) {
     const feedback = document.getElementById('feedback');
-    const countryInput = document.getElementById('country-input');
     const correctCount = document.getElementById('correct-count');
     const incorrectCount = document.getElementById('incorrect-count');
 
-    const inputNormalized = input.trim().toLowerCase();
-    const correctAnswer = correctCountry.some((name) => name.toLowerCase() === inputNormalized);
-
-    if (correctAnswer) {
+    if (selected.toLowerCase() === correct.toLowerCase()) {
+        feedback.textContent = 'Correct!';
+        feedback.classList.add('correct');
         correctAnswers++;
         correctCount.textContent = correctAnswers;
-        feedback.textContent = 'Richtig! 😊';
-        feedback.classList.remove('wrong-feedback');
-        feedback.classList.add('correct-feedback');
-        feedback.style.display = 'block';
     } else {
+        feedback.textContent = `Wrong! The correct answer is ${correct}`;
+        feedback.classList.add('wrong');
         incorrectAnswers++;
         incorrectCount.textContent = incorrectAnswers;
-        feedback.textContent = `Falsch! Die richtige Antwort ist: ${correctCountry[0]} 😞`;
-        feedback.classList.remove('correct-feedback');
-        feedback.classList.add('wrong-feedback');
-        feedback.style.display = 'block';
     }
-
+    feedback.style.display = 'block';
     setTimeout(() => {
-        displayQuestion();
-    }, 1500);
+        feedback.style.display = 'none';
+    }, 2000);
 }
 
-// Funktion, um den Dunkelmodus umzuschalten
 function toggleDarkMode() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -4037,7 +3657,6 @@ function toggleDarkMode() {
     localStorage.setItem('theme', newTheme);
 }
 
-// Initialisierungsfunktion, die beim Laden der Seite ausgeführt wird
 window.onload = () => {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
