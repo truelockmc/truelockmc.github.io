@@ -1,0 +1,41 @@
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flaggen Lernen</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+
+    <header>
+        <h1>Flaggen Lernen (BETA)</h1>
+        <p>Errate das Land anhand der Flagge!</p>
+    </header>
+
+    <main>
+        <div id="quiz-container">
+            <div id="flag-image-container">
+                <img id="flag-image" src="" alt="Flagge" />
+            </div>
+
+            <div id="answers-container">
+                <!-- Dynamisch generierte Buttons für die Länderantworten -->
+            </div>
+
+            <div id="feedback" class="feedback"></div>
+        </div>
+
+        <div id="score-container">
+            <p id="correct-score">
+                <span class="score-icon">&#9989;</span> Richtige Antworten: <span id="correct-count">0</span>
+            </p>
+            <p id="incorrect-score">
+                <span class="score-icon">&#10060;</span> Falsche Antworten: <span id="incorrect-count">0</span>
+            </p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
