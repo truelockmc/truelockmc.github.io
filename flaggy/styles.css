@@ -1,0 +1,123 @@
+/* Base styles */
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --card-bg: #fff;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --link-color: #007BFF;
+    --correct-color: #4CAF50;
+    --incorrect-color: #F44336;
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #f5f5f5;
+    --card-bg: #1e1e1e;
+    --card-shadow: rgba(255, 255, 255, 0.1);
+    --link-color: #80b3ff;
+    --correct-color: #66BB6A;
+    --incorrect-color: #FF7961;
+}
+
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+header {
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--card-bg);
+    box-shadow: 0px 4px 8px var(--card-shadow);
+    margin-bottom: 2rem;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 3rem;
+}
+
+header p {
+    font-size: 1.5rem;
+    color: var(--link-color);
+}
+
+header small {
+    display: block;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+#start-container {
+    text-align: center;
+    padding: 20px;
+}
+
+#difficulty-buttons {
+    margin-top: 20px;
+}
+
+.difficulty-button {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s;
+}
+
+.difficulty-button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--card-bg);
+    box-shadow: 0px -4px 8px var(--card-shadow);
+    padding: 10px 0;
+    text-align: center;
+}
+
+#footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+#footer-links a {
+    color: var(--link-color);
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+#footer-links a:hover {
+    text-decoration: underline;
+}
+
+.dark-mode-toggle {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--card-bg);
+    border: none;
+    color: var(--text-color);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px var(--card-shadow);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    background-color: var(--link-color);
+    color: var(--bg-color);
+}
