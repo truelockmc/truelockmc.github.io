@@ -3519,6 +3519,9 @@ function displayQuestion() {
     const correctCountry = currentQuestion.country[0];
     const possibleAnswers = [correctCountry, ...getRandomCountries(correctCountry, allCountries)];
 
+    // Mische die Antworten zufällig
+    shuffleArray(possibleAnswers);
+
     // Lösche vorherige Antworten
     answersContainer.innerHTML = '';
 
@@ -3574,6 +3577,14 @@ function checkAnswer(selectedCountry, correctCountry) {
     setTimeout(() => {
         displayQuestion(); // Zeige die nächste Flagge
     }, 1500); // Verzögerung von 1,5 Sekunden
+}
+
+// Hilfsfunktion zum zufälligen Mischen eines Arrays
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]]; // Tausche die Elemente
+    }
 }
 
 function toggleDarkMode() {
