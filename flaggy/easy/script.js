@@ -324,7 +324,7 @@ const flagData = [
     {
         country: [
             "Demokratische Republik Kongo",
-            "Congo, The Democratic Republic of the"
+            "Democratic Republic of the Congo"
         ],
         flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/cd.svg"
     },
@@ -855,8 +855,8 @@ const flagData = [
     },
     {
         country: [
-            "Korea, Republik",
-            "Korea, Republic of"
+            "Südkorea",
+            "South Korea"
         ],
         flagUrl: "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/kr.svg"
     },
@@ -3033,8 +3033,8 @@ const flagData = [
     },
     {
         "country": [
-            "Palästina, Staat",
-            "Palestine, State of"
+            "Palästina",
+            "State of Palestine"
         ],
         "flagUrl": "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/ps.svg"
     },
@@ -3068,8 +3068,8 @@ const flagData = [
     },
     {
         "country": [
-            "Russische Föderation",
-            "Russian Federation"
+            "Russland",
+            "Russia"
         ],
         "flagUrl": "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/ru.svg"
     },
@@ -3229,8 +3229,8 @@ const flagData = [
     },
     {
         "country": [
-            "Saint-Martin (Niederländischer Teil)",
-            "Sint Maarten (Dutch part)"
+            "Saint-Martin",
+            "Sint Maarten"
         ],
         "flagUrl": "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/sx.svg"
     },
@@ -3243,8 +3243,8 @@ const flagData = [
     },
     {
         "country": [
-            "Syrien, Arabische Republik",
-            "Syrian Arab Republic"
+            "Syrien",
+            "Syria"
         ],
         "flagUrl": "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/sy.svg"
     },
