@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einstellbare Uhr für Mutter</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    /* Der äußere Uhrkreis – 300px im Durchmesser, Border inklusive */
+    .clock {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      border: 8px solid #333;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    /* Der kleine Punkt im Zentrum – exakt in der Mitte */
+    .center {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #333;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+    /* Stundenstriche (Ticks) – 12 Stück, die vom Mittelpunkt ausgehend am Rand des inneren Kreises positioniert werden */
+    .hour-tick {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: bottom center;
+      background: #333;
+      height: 12px; /* Höhe der Striche */
+      width: 3px;   /* Breite der Striche */
+      z-index: 2;
+    }
+    /* Zahlen (1 bis 12) – werden ebenfalls relativ zum Mittelpunkt positioniert */
+    .number {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      font-weight: bold;
+      color: #333;
+      z-index: 3;
+    }
+    /* Zeiger – rotieren alle um den exakten Mittelpunkt */
+    .hand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      /* Der Drehpunkt der Zeiger (transform-origin) bleibt hier unverändert, sodass sie exakt vom Mittelpunkt aus starten */
+      transform-origin: 0 50%;
+      transition: transform 0.5s ease-in-out;
+      z-index: 4;
+    }
+    .hand.hour { width: 60px; height: 8px; background: #333; border-radius: 4px; }
+    .hand.minute { width: 90px; height: 6px; background: #333; border-radius: 3px; }
+    .hand.second { width: 110px; height: 2px; background: red; border-radius: 1px; }
+    /* Steuerungselemente */
+    .controls, .checkboxes {
+      margin-bottom: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .controls input[type="number"] {
+      width: 70px;
+      padding: 5px;
+      font-size: 16px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .controls button, .checkboxes button {
+      padding: 5px 10px;
+      font-size: 16px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .checkboxes label {
+      font-size: 16px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <!-- Uhr-Container -->
+  <div class="clock" id="clock"></div>
+  
+  <!-- Eingabefelder für die Zeiteinstellung -->
+  <div class="controls">
+    <input type="number" id="hours" placeholder="Stunden" min="0" max="23" autocomplete="off">
+    <input type="number" id="minutes" placeholder="Minuten" min="0" max="59" autocomplete="off">
+    <input type="number" id="seconds" placeholder="Sekunden" min="0" max="59" autocomplete="off">
+    <button onclick="setTime()">Setzen</button>
+  </div>
+  
+  <!-- Checkboxen zum Aus-/Einblenden der Zeiger -->
+  <div class="checkboxes">
+    <label><input type="checkbox" id="showHour" checked> Stundenzeiger</label>
+    <label><input type="checkbox" id="showMinute" checked> Minutenzeiger</label>
+    <label><input type="checkbox" id="showSecond" checked> Sekundenzeiger</label>
+  </div>
+  
+  <!-- Download-Button -->
+  <div class="controls">
+    <button onclick="downloadClockImage()">Bild herunterladen</button>
+  </div>
+  
+  <!-- html2canvas für den Download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    (function() {
+      var clock = document.getElementById('clock');
+      // Mittelpunkt des Containers (immer 150,150 bei 300px)
+      var centerX = clock.clientWidth / 2;
+      var centerY = clock.clientHeight / 2;
+      /* 
+         Berechne den effektiven Innenradius.
+         Da der Container 300px groß ist und ein Border von 8px an allen Seiten verwendet wird,
+         beträgt der innere Durchmesser 300 - 16 = 284px, also ein effektiver Radius von 142px.
+      */
+      var effectiveRadius = (clock.clientWidth - 16) / 2; // 142px
+      
+      // Die Stundenstriche (Ticks) sollen exakt am Rand des inneren Kreises enden:
+      var tickRadius = effectiveRadius; // 142px
+      
+      // Die Zahlen werden etwas weiter innen platziert, z. B. effectiveRadius - 30:
+      var numberRadius = effectiveRadius - 30; // ca. 112px
+      
+      // Erzeuge 12 Stundenstriche (alle 30°):
+      for (var i = 0; i < 12; i++) {
+        var hourTick = document.createElement('div');
+        hourTick.className = 'hour-tick';
+        // Rotationswinkel: i * 30°; die Striche werden vom Mittelpunkt aus (50%/50%) mittels translateY() positioniert.
+        hourTick.style.transform = 'rotate(' + (i * 30) + 'deg) translateY(-' + tickRadius + 'px)';
+        ;
+      }
+      
+      // Erzeuge die Zahlen 1 bis 12:
+      for (var i = 1; i <= 12; i++) {
+        // Berechne den Winkel: Für 12 soll der Text oben stehen (daher -90° Offset)
+        var angle = (i * 30 - 90) * (Math.PI / 180);
+        var x = centerX + numberRadius * Math.cos(angle) - 15; // 15 = halbe Breite der Zahl (30px/2)
+        var y = centerY + numberRadius * Math.sin(angle) - 15;
+        var numberDiv = document.createElement('div');
+        numberDiv.className = 'number';
+        numberDiv.style.left = x + 'px';
+        numberDiv.style.top = y + 'px';
+        numberDiv.textContent = i;
+        clock.appendChild(numberDiv);
+      }
+      
+      // Erzeuge die Zeiger (alle rotieren exakt um den Mittelpunkt)
+      var hourHand = document.createElement('div');
+      hourHand.className = 'hand hour';
+      hourHand.id = 'hourHand';
+      clock.appendChild(hourHand);
+      
+      var minuteHand = document.createElement('div');
+      minuteHand.className = 'hand minute';
+      minuteHand.id = 'minuteHand';
+      clock.appendChild(minuteHand);
+      
+      var secondHand = document.createElement('div');
+      secondHand.className = 'hand second';
+      secondHand.id = 'secondHand';
+      clock.appendChild(secondHand);
+      
+      // Erzeuge den Zentrumspunkt
+      var centerDot = document.createElement('div');
+      centerDot.className = 'center';
+      clock.appendChild(centerDot);
+    })();
+    
+    // Aktualisiert die Zeiger (Pivot: Mittelpunkt, 0° entspricht oben → -90° Offset)
+    function updateClock(hours, minutes, seconds) {
+      var hourAngle = -90 + ((hours % 12) * 30) + (minutes * 0.5);
+      var minuteAngle = -90 + (minutes * 6);
+      var secondAngle = -90 + (seconds * 6);
+      document.getElementById('hourHand').style.transform = 'rotate(' + hourAngle + 'deg)';
+      document.getElementById('minuteHand').style.transform = 'rotate(' + minuteAngle + 'deg)';
+      document.getElementById('secondHand').style.transform = 'rotate(' + secondAngle + 'deg)';
+    }
+    
+    function setTime() {
+      var hours = parseInt(document.getElementById('hours').value) || 0;
+      var minutes = parseInt(document.getElementById('minutes').value) || 0;
+      var seconds = parseInt(document.getElementById('seconds').value) || 0;
+      updateClock(hours, minutes, seconds);
+    }
+    
+    function updateVisibility() {
+      document.getElementById('hourHand').style.display = document.getElementById('showHour').checked ? 'block' : 'none';
+      document.getElementById('minuteHand').style.display = document.getElementById('showMinute').checked ? 'block' : 'none';
+      document.getElementById('secondHand').style.display = document.getElementById('showSecond').checked ? 'block' : 'none';
+    }
+    
+    document.getElementById('showHour').addEventListener('change', updateVisibility);
+    document.getElementById('showMinute').addEventListener('change', updateVisibility);
+    document.getElementById('showSecond').addEventListener('change', updateVisibility);
+    
+    function downloadClockImage() {
+      html2canvas(document.getElementById('clock')).then(function(canvas) {
+        var link = document.createElement('a');
+        link.download = 'uhr.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+    
+    function initClock() {
+      var now = new Date();
+      updateClock(now.getHours(), now.getMinutes(), now.getSeconds());
+      document.getElementById('hours').value = '';
+      document.getElementById('minutes').value = '';
+      document.getElementById('seconds').value = '';
+      updateVisibility();
+    }
+    
+    document.addEventListener('DOMContentLoaded', initClock);
+  </script>
+</body>
+</html>
