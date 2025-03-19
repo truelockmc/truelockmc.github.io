@@ -36,7 +36,7 @@
     header {
       display: flex; /* Use flexbox for layout */
       align-items: center; /* Center items vertically */
-      justify-content: center; /* Center all items horizontally */
+      justify-content: space-between; /* Spread out left, center and right */
       padding: 2rem;
       background-color: var(--card-bg);
       box-shadow: 0px 4px 8px var(--card-shadow);
@@ -44,12 +44,12 @@
     }
 
     .header-content {
-      flex-grow: 1; /* Allow this section to take up remaining space */
-      text-align: center; /* Center the title */
+      text-align: center;
+      flex-grow: 1;
     }
 
     header h1 {
-      margin-left: 20px; /* Space between flag and title */
+      margin: 0 20px;
       font-size: 2.5rem;
     }
 
@@ -58,7 +58,8 @@
       color: var(--link-color);
     }
 
-    .flag-section {
+    .flag-section,
+    .games-section {
       display: flex; 
       align-items: center; 
       width: auto; /* Adjust width to fit content */
@@ -68,14 +69,16 @@
       box-shadow: 0px 4px 6px var(--card-shadow); 
     }
 
-    .flag-section img {
-      width: 95px; /* Flag size */
+    .flag-section img,
+    .games-section img {
+      width: 95px; /* Same size for both images */
       height: auto; 
       margin-right: 10px; 
     }
 
-    .flag-section div {
-      color: var(--flag-text-color); /* Change text color for better visibility */
+    .flag-section div,
+    .games-section div {
+      color: var(--flag-text-color); /* Gold color for better visibility */
     }
 
     #projects {
@@ -134,115 +137,128 @@
     }
 
     .dark-mode-toggle:hover {
-        background-color :var(--link-color); 
-        color :var(--bg-color); 
-     }
+      background-color: var(--link-color); 
+      color: var(--bg-color); 
+    }
+    
+    footer {
+      text-align: center; 
+      padding-top: 20px; 
+      margin-top: 20px; 
+      border-top: 1px solid var(--card-shadow);
+      font-size: 14px; 
+    }
+    
+    .favourites {
+      margin-bottom: 30px; 
+      text-align: center; 
+    }
+    
+    .favourites h2 {
+      font-size: 2rem; 
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      header h1 { font-size: 2rem; }
+      header p { font-size: 1rem; }
+      .repo h3 { font-size: 1.2rem; }
+    }
      
-     footer {
-        text-align:center; 
-        padding-top :20px; 
-        margin-top :20px; 
-        border-top :1px solid var(--card-shadow);
-        font-size :14px; 
-     }
-     
-     .favourites {
-       margin-bottom :30px; 
-       text-align:center; 
-     }
-     
-     .favourites h2 {
-       font-size :2rem; 
-     }
-     
-     /* Responsive adjustments */
-     @media (max-width :600px) {
-       header h1 { font-size :2rem; }
-       header p { font-size :1rem; }
-       .repo h3 { font-size :1.2rem; }
-     }
-     
-   </style>
+  </style>
 </head>
 <body data-theme="dark"> <!-- Set default theme to dark -->
 
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
 
 <header>
-   <div class="flag-section">
-       <a href="https://truelockmc.github.io/flaggy/" target="_blank"> <!-- Make the flag clickable -->
-           <img src="https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/de.svg" alt="Germany Flag">
-           <div>
-               <h2>Flaggy</h2><br>
-               <span style="color:#FFD700;">Flagtrainer</span> <!-- Change the color of Flagtrainer -->
-           </div>
-       </a>
-   </div>
+  <!-- Left side: Flaggy field -->
+  <div class="flag-section">
+    <a href="https://truelockmc.github.io/flaggy/" target="_blank">
+      <img src="https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/de.svg" alt="Germany Flag">
+      <div>
+        <h2>Flaggy</h2><br>
+        <span style="color:#FFD700;">Flagtrainer</span>
+      </div>
+    </a>
+  </div>
 
-   <div class="header-content">
-       <h1>Welcome to my website 😊</h1>
-   </div>
+  <!-- Center: Header title -->
+  <div class="header-content">
+    <h1>Welcome to my website 😊</h1>
+  </div>
+
+  <!-- Right side: Games field -->
+  <div class="games-section">
+    <a href="https://truelockmc.github.io/games/" target="_blank">
+      <!-- Replace the placeholder image URL with your actual Games image if available -->
+      <img src="https://github.com/truelockmc/truelockmc.github.io/raw/refs/heads/main/game-icon.png" alt="Game Icon">
+      <div>
+        <h2>Games</h2><br>
+        <span style="color:#FFD700;">Play Now</span>
+      </div>
+    </a>
+  </div>
 </header>
 
 <section class="favourites">
-   <h2>Favourites ⭐</h2>
-   <p>My Best Projects</p>
-   <div id="favourite-repos">
-       <div class="repo">
-           <h3><a href="https://github.com/truelockmc/PC-Optimus" target="_blank">PCOptimus</a></h3>
-           <p>A multi-use Python tool for Windows that offers features to clean, debloat, update, repair or get info about your PC.</p>
-       </div>
-       <div class="repo">
-           <h3><a href="https://github.com/truelockmc/python-ransomware" target="_blank">Python Ransomware</a></h3>
-           <p>A simple ransomware written in Python that also bypasses Microsoft Defender.</p>
-       </div>
-       <!-- Neue Repositories hinzufügen -->
-       <div class="repo">
-           <h3><a href="https://github.com/truelockmc/shutdown_timer" target="_blank">Shutdown Timer</a></h3>
-           <p>A little tool that offers ways to perform a timed shutdown on your PC.<br> Useful for when you're listening to a podcast to fall asleep and your computer shouldn't run all night.</p>
-       </div>
-   </div>
+  <h2>Favourites ⭐</h2>
+  <p>My Best Projects</p>
+  <div id="favourite-repos">
+    <div class="repo">
+      <h3><a href="https://github.com/truelockmc/PC-Optimus" target="_blank">PCOptimus</a></h3>
+      <p>A multi-use Python tool for Windows that offers features to clean, debloat, update, repair or get info about your PC.</p>
+    </div>
+    <div class="repo">
+      <h3><a href="https://github.com/truelockmc/python-ransomware" target="_blank">Python Ransomware</a></h3>
+      <p>A simple ransomware written in Python that also bypasses Microsoft Defender.</p>
+    </div>
+    <!-- Additional repositories -->
+    <div class="repo">
+      <h3><a href="https://github.com/truelockmc/shutdown_timer" target="_blank">Shutdown Timer</a></h3>
+      <p>A little tool that offers ways to perform a timed shutdown on your PC.<br> Useful for when you're listening to a podcast to fall asleep and your computer shouldn't run all night.</p>
+    </div>
+  </div>
 </section>
 
 <section id="projects">
-   <h2>My GitHub Repositories</h2>
-   <div id="repo-container"></div>
+  <h2>My GitHub Repositories</h2>
+  <div id="repo-container"></div>
 </section>
 
 <footer>
-   <p>View the source code on <a href="https://github.com/truelockmc/truelockmc.github.io/blob/main/index.html" target="_blank">GitHub</a>.</p>
+  <p>View the source code on <a href="https://github.com/truelockmc/truelockmc.github.io/blob/main/index.html" target="_blank">GitHub</a>.</p>
 </footer>
 
 <script>
 // Dark mode toggle function
 function toggleDarkMode() {
-   const currentTheme = document.documentElement.getAttribute('data-theme');
-   const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-   document.documentElement.setAttribute('data-theme', newTheme);
-   localStorage.setItem('theme', newTheme);
+  const currentTheme = document.documentElement.getAttribute('data-theme');
+  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
 }
 
 // Apply saved theme on load
 document.addEventListener('DOMContentLoaded', () => {
-   const savedTheme = localStorage.getItem('theme') || 'dark'; // Default to dark mode
-   document.documentElement.setAttribute('data-theme', savedTheme);
+  const savedTheme = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
 });
 
 // Fetch repos from GitHub
 fetch('https://api.github.com/users/truelockmc/repos')
-   .then(response => response.json())
-   .then(data => {
-       const repoContainer = document.getElementById('repo-container');
-       data.forEach(repo => {
-           const repoDiv = document.createElement('div');
-           repoDiv.classList.add('repo');
-           repoDiv.innerHTML = `
-               <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
-               <p>${repo.description || 'No description available'}</p>
-           `;
-           repoContainer.appendChild(repoDiv);
-       });
-   });
+  .then(response => response.json())
+  .then(data => {
+    const repoContainer = document.getElementById('repo-container');
+    data.forEach(repo => {
+      const repoDiv = document.createElement('div');
+      repoDiv.classList.add('repo');
+      repoDiv.innerHTML = `
+        <h3><a href="${repo.html_url}" target="_blank">${repo.name}</a></h3>
+        <p>${repo.description || 'No description available'}</p>
+      `;
+      repoContainer.appendChild(repoDiv);
+    });
+  });
 </script>
 </body>
 </html>
