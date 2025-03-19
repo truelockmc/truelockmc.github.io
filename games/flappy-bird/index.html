@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flappy Bird</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #70c5ce;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    /* Container for the game to center the canvas */
+    #gameContainer {
+      position: relative;
+      width: 400px;
+      height: 600px;
+    }
+    canvas {
+      display: block;
+      background: #70c5ce;
+    }
+    /* Overlay for start, settings, and game over */
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    #overlay > * {
+      margin: 10px;
+    }
+    #overlay button {
+      padding: 15px 30px;
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #ffcc00;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease;
+    }
+    #overlay button:hover {
+      background-color: #ffdb4d;
+    }
+    /* Scoreboard display */
+    #scoreBoard {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+      font-size: 24px;
+      z-index: 5;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    label {
+      color: #fff;
+      font-size: 18px;
+    }
+    select, input[type="range"] {
+      font-size: 16px;
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+      margin-left: 10px;
+    }
+    .settings-item {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="scoreBoard">Score: 0<br>Highscore: 0</div>
+    <div id="overlay">
+      <div id="settings">
+        <div class="settings-item">
+          <label for="birdColor">Bird Color:</label>
+          <select id="birdColor">
+            <option value="blue">Blue</option>
+            <option value="red">Red</option>
+            <option value="yellow" selected>Yellow</option>
+          </select>
+        </div>
+        <div class="settings-item">
+          <label for="volumeControl">Volume:</label>
+          <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="1">
+        </div>
+      </div>
+      <button id="playButton">Play</button>
+    </div>
+  </div>
+
+  <script>
+    // Get the canvas and context
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let gameState = 'start';
+
+    // Asset paths (ensure your folder structure is correct)
+    const assetPaths = {
+      background: 'sprites/background-day.png',
+      base: 'sprites/base.png',
+      pipe: 'sprites/pipe-green.png',
+      birdBlue: [
+        'sprites/bluebird-upflap.png',
+        'sprites/bluebird-midflap.png',
+        'sprites/bluebird-downflap.png'
+      ],
+      birdRed: [
+        'sprites/redbird-upflap.png',
+        'sprites/redbird-midflap.png',
+        'sprites/redbird-downflap.png'
+      ],
+      birdYellow: [
+        'sprites/yellowbird-upflap.png',
+        'sprites/yellowbird-midflap.png',
+        'sprites/yellowbird-downflap.png'
+      ],
+      gameover: 'sprites/gameover.png',
+      message: 'sprites/message.png'
+    };
+
+    const audioPaths = {
+      wing: 'audio/wing.wav',
+      point: 'audio/point.wav',
+      hit: 'audio/hit.wav',
+      die: 'audio/die.wav'
+    };
+
+    // Objects for images and audios
+    const images = {};
+    const audios = {};
+
+    function loadImages(paths, callback) {
+      let loadedImages = 0;
+      const numImages = Object.keys(paths).length;
+      for (const key in paths) {
+        if (Array.isArray(paths[key])) {
+          images[key] = [];
+          let loadedArray = 0;
+          for (let i = 0; i < paths[key].length; i++) {
+            const img = new Image();
+            img.src = paths[key][i];
+            img.onload = function() {
+              loadedArray++;
+              if (loadedArray === paths[key].length) {
+                loadedImages++;
+                if (loadedImages === numImages) callback();
+              }
+            };
+            images[key].push(img);
+          }
+        } else {
+          images[key] = new Image();
+          images[key].src = paths[key];
+          images[key].onload = function() {
+            loadedImages++;
+            if (loadedImages === numImages) callback();
+          };
+        }
+      }
+    }
+
+    function loadAudios(paths) {
+      for (const key in paths) {
+        const audio = new Audio();
+        audio.src = paths[key];
+        audios[key] = audio;
+      }
+    }
+
+    loadImages(assetPaths, function() {
+      console.log('Images loaded.');
+      // Set default bird to yellow if not already set
+      if (!currentBird.length) {
+        currentBird = images.birdYellow;
+      }
+    });
+    loadAudios(audioPaths);
+
+    // Default bird images array (will be set to yellow by default)
+    let currentBird = [];
+
+    // Game variables
+    const gravity = 0.25;
+    const jumpForce = -4.6;
+    let bird = {
+      x: 50,
+      y: 150,
+      width: 34,
+      height: 24,
+      velocity: 0,
+      frame: 0,
+      frameCount: 0
+    };
+
+    let pipes = [];
+    const pipeWidth = 52;
+    // Increased gap for easier gameplay (but not too easy)
+    const pipeGap = 120;
+    const pipeSpeed = 2;
+    let pipeTimer = 0;
+    // Increased interval between pipes to give more breathing room
+    const pipeInterval = 110;
+
+    let baseX = 0;
+    let score = 0;
+    let highScore = localStorage.getItem('flappyHighScore') || 0;
+
+    function updateScoreBoard() {
+      document.getElementById('scoreBoard').innerHTML =
+        'Score: ' + score + '<br>Highscore: ' + highScore;
+    }
+    updateScoreBoard();
+
+    // When Play is clicked, read settings and start the game
+    document.getElementById('playButton').addEventListener('click', function() {
+      const selectedColor = document.getElementById('birdColor').value;
+      if (selectedColor === 'blue') {
+        currentBird = images.birdBlue;
+      } else if (selectedColor === 'red') {
+        currentBird = images.birdRed;
+      } else if (selectedColor === 'yellow') {
+        currentBird = images.birdYellow;
+      }
+      const volumeValue = parseFloat(document.getElementById('volumeControl').value);
+      for (let key in audios) {
+        audios[key].volume = volumeValue;
+      }
+      resetGame();
+      gameState = 'playing';
+      document.getElementById('overlay').style.display = 'none';
+    });
+
+    // Listen for key presses and clicks to make the bird flap
+    document.addEventListener('keydown', flap);
+    canvas.addEventListener('click', flap);
+
+    function flap(e) {
+      if (gameState === 'playing') {
+        bird.velocity = jumpForce;
+        audios.wing.currentTime = 0;
+        audios.wing.play();
+      }
+    }
+
+    function resetGame() {
+      bird.x = 50;
+      bird.y = 150;
+      bird.velocity = 0;
+      bird.frame = 0;
+      bird.frameCount = 0;
+      pipes = [];
+      score = 0;
+      pipeTimer = 0;
+      updateScoreBoard();
+    }
+
+    function checkCollision() {
+      const baseY = canvas.height - images.base.height;
+      if (bird.y + bird.height >= baseY || bird.y <= 0) {
+        return true;
+      }
+      for (let i = 0; i < pipes.length; i++) {
+        const p = pipes[i];
+        if (bird.x + bird.width > p.x && bird.x < p.x + pipeWidth) {
+          if (bird.y < p.topHeight || bird.y + bird.height > p.topHeight + pipeGap) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    function gameLoop() {
+      if (gameState === 'playing') {
+        bird.velocity += gravity;
+        bird.y += bird.velocity;
+
+        bird.frameCount++;
+        if (bird.frameCount % 5 === 0) {
+          bird.frame = (bird.frame + 1) % currentBird.length;
+        }
+
+        pipeTimer++;
+        if (pipeTimer > pipeInterval) {
+          const topHeight = Math.floor(Math.random() * (canvas.height - images.base.height - pipeGap - 50)) + 20;
+          pipes.push({ x: canvas.width, topHeight: topHeight });
+          pipeTimer = 0;
+        }
+
+        for (let i = 0; i < pipes.length; i++) {
+          pipes[i].x -= pipeSpeed;
+          if (!pipes[i].scored && pipes[i].x + pipeWidth < bird.x) {
+            score++;
+            pipes[i].scored = true;
+            audios.point.currentTime = 0;
+            audios.point.play();
+            if (score > highScore) {
+              highScore = score;
+              localStorage.setItem('flappyHighScore', highScore);
+            }
+            updateScoreBoard();
+          }
+        }
+        pipes = pipes.filter(p => p.x + pipeWidth > 0);
+        baseX = (baseX - pipeSpeed) % images.base.width;
+        if (checkCollision()) {
+          gameState = 'gameover';
+          audios.hit.play();
+          audios.die.play();
+          setTimeout(() => {
+            document.getElementById('overlay').style.display = 'flex';
+          }, 1000);
+        }
+      }
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    function draw() {
+      ctx.drawImage(images.background, 0, 0);
+      for (let i = 0; i < pipes.length; i++) {
+        const p = pipes[i];
+        ctx.save();
+        ctx.translate(p.x + pipeWidth / 2, p.topHeight);
+        ctx.drawImage(images.pipe, -pipeWidth / 2, -images.pipe.height, pipeWidth, images.pipe.height);
+        ctx.restore();
+        ctx.drawImage(images.pipe, p.x, p.topHeight + pipeGap, pipeWidth, images.pipe.height);
+      }
+      ctx.drawImage(images.base, baseX, canvas.height - images.base.height);
+      ctx.drawImage(images.base, baseX + images.base.width, canvas.height - images.base.height);
+      if (currentBird && currentBird[bird.frame]) {
+        ctx.drawImage(currentBird[bird.frame], bird.x, bird.y);
+      }
+      if (gameState === 'gameover') {
+        ctx.drawImage(images.gameover, (canvas.width - images.gameover.width) / 2, (canvas.height - images.gameover.height) / 2 - 50);
+      }
+    }
+
+    gameLoop();
+  </script>
+</body>
+</html>
