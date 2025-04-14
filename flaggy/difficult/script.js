@@ -3069,7 +3069,7 @@ const flagData = [
     {
         "country": [
             "Russland",
-            "Russia
+            "Russia"
         ],
         "flagUrl": "https://raw.githubusercontent.com/truelockmc/truelockmc.github.io/refs/heads/main/flaggy/pictures/pictures/ru.svg"
     },
