@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mein Modernes Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #222;
+      --accent: #0070f3;
+      --bg: #fff;
+      --text: #333;
+      --muted: #666;
+      --card-bg: #f9f9f9;
+      --radius: 8px;
+      --gap: 1.5rem;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    header {
+      padding: var(--gap);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-bg);
+      background: var(--bg);
+    }
+    header h1 {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    nav a {
+      margin-left: 1rem;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    main {
+      max-width: 1200px;
+      margin: var(--gap) auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--gap);
+      padding: 0 var(--gap);
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s ease;
+    }
+    .card:hover { transform: translateY(-4px); }
+    .card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .card-content h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--primary);
+    }
+    .card-content p {
+      flex: 1;
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .card-content a {
+      text-decoration: none;
+      color: var(--accent);
+      font-weight: 600;
+      align-self: flex-start;
+    }
+    footer {
+      text-align: center;
+      padding: var(--gap);
+      font-size: 0.85rem;
+      color: var(--muted);
+      border-top: 1px solid var(--card-bg);
+      margin-top: var(--gap);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Modernes Blog</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Über uns</a>
+      <a href="#">Kontakt</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Artikel-Kachel 1 -->
+    <article class="card">
+      <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.naturdachwelten.de%2Fimages%2Fblog%2FEvSt-Naturdachwelten-Blog-plaedoyer-fuer-mensch-natur-gr.jpg&f=1&nofb=1&ipt=a1d1db4202b0ec67c0a91db8dc5906f92ee453d2f6deca6260dfe8e414180377" alt="Artikelbild">
+      <div class="card-content">
+        <h2>Why Nature is More Important for Us Than We (Want to) Think</h2>
+        <p>Have you ever paused to wonder what life would be like if the trees, rivers, and skies suddenly vanished? Or if Nature "decided" to turn itself against us?</p>
+        <a href="article.html">Continue Reading →</a>
+      </div>
+    </article>
+
+    <!-- Artikel-Kachel 2 -->
+    <article class="card">
+      <img src="https://via.placeholder.com/400x200" alt="Artikelbild">
+      <div class="card-content">
+        <h2>Spannende Artikel Überschrift</h2>
+        <p>Eine enorm Interessante Beschreibung</p>
+        <a href="https://freely.wuaze.com">Weiterlesen →</a>
+      </div>
+    </article>
+
+    <!-- Weitere Kacheln einfach kopieren -->
+  </main>
+
+  <footer>
+    © 2025 Modernes Blog – Alle Rechte vorbehalten.
+  </footer>
+</body>
+</html>
