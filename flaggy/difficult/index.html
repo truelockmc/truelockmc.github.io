@@ -1,40 +1,53 @@
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flaggen Lernen</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Flaggen Lernen</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+            Toggle Dark Mode
+        </button>
 
-    <header>
-        <h1>Flaggen Lernen    (BETA)</h1>
-        <p>Errate das Land anhand der Flagge!</p>
-    </header>
+        <header>
+            <h1>Flaggen Lernen (BETA)</h1>
+            <p>Errate das Land anhand der Flagge!</p>
+        </header>
 
-    <main>
-        <div id="quiz-container">
-            <div id="flag-image-container">
-                <img id="flag-image" src="" alt="Flagge" />
+        <main>
+            <div id="quiz-container">
+                <div id="flag-image-container">
+                    <img id="flag-image" src="" alt="Flagge" />
+                </div>
+                <input
+                    type="text"
+                    id="country-input"
+                    placeholder="Gib das Land ein..."
+                    autofocus
+                />
+                <div id="submit-container">
+                    <button id="submit-btn" class="answer-button">
+                        Antwort Überprüfen
+                    </button>
+                </div>
+                <div id="feedback" class="feedback"></div>
             </div>
-            <input type="text" id="country-input" placeholder="Gib das Land ein..." autofocus />
-            <div id="submit-container">
-                <button id="submit-btn" class="answer-button">Antwort Überprüfen</button>
+
+            <div id="score-container">
+                <p id="correct-score">
+                    <span class="score-icon">&#9989;</span> Richtige Antworten:
+                    <span id="correct-count">0</span>
+                </p>
+                <p id="incorrect-score">
+                    <span class="score-icon">&#10060;</span> Falsche Antworten:
+                    <span id="incorrect-count">0</span>
+                </p>
             </div>
-            <div id="feedback" class="feedback"></div>
-        </div>
+        </main>
 
-        <div id="score-container">
-            <p id="correct-score">
-                <span class="score-icon">&#9989;</span> Richtige Antworten: <span id="correct-count">0</span>
-            </p>
-            <p id="incorrect-score">
-                <span class="score-icon">&#10060;</span> Falsche Antworten: <span id="incorrect-count">0</span>
-            </p>
-        </div>
-    </main>
-
-    <script src="script.js"></script>
-</body>
+        <script src="../data.js"></script>
+        <script src="../shared.js"></script>
+        <script src="script.js"></script>
+    </body>
 </html>
