@@ -47,6 +47,10 @@ function checkAnswer(selectedCountry, correctCountry) {
   const feedback = document.getElementById("feedback");
   const li = getLangIndex();
 
+  document
+    .querySelectorAll(".answer-button")
+    .forEach((btn) => (btn.disabled = true));
+
   if (correctCountry.includes(selectedCountry)) {
     correctAnswers++;
     document.getElementById("correct-count").textContent = correctAnswers;

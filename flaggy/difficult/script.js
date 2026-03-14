@@ -17,8 +17,10 @@ function displayQuestion() {
 
   // Neue Event-Handler setzen (alte klonen weg)
   const newSubmit = submitBtn.cloneNode(true);
+  newSubmit.disabled = false;
   submitBtn.parentNode.replaceChild(newSubmit, submitBtn);
   const newInput = countryInput.cloneNode(true);
+  newInput.disabled = false;
   countryInput.parentNode.replaceChild(newInput, countryInput);
 
   newSubmit.onclick = () =>
@@ -33,6 +35,12 @@ function checkAnswer(input, correctCountry) {
   const feedback = document.getElementById("feedback");
   const li = getLangIndex();
   const inputNormalized = input.trim().toLowerCase();
+
+  const countryInput = document.getElementById("country-input");
+  const submitBtn = document.getElementById("submit-btn");
+  if (countryInput) countryInput.disabled = true;
+  if (submitBtn) submitBtn.disabled = true;
+
   // Akzeptiert beide Sprachen als korrekte Antwort
   const isCorrect = correctCountry.some(
     (name) => name.toLowerCase() === inputNormalized,
