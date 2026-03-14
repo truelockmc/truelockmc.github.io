@@ -4,9 +4,9 @@
     --text-color: #333;
     --card-bg: #fff;
     --card-shadow: rgba(0, 0, 0, 0.1);
-    --link-color: #007BFF;
-    --correct-color: #4CAF50;
-    --incorrect-color: #F44336;
+    --link-color: #007bff;
+    --correct-color: #4caf50;
+    --incorrect-color: #f44336;
 }
 
 [data-theme="dark"] {
@@ -15,13 +15,13 @@
     --card-bg: #1e1e1e;
     --card-shadow: rgba(255, 255, 255, 0.1);
     --link-color: #80b3ff;
-    --correct-color: #66BB6A;
-    --incorrect-color: #FF7961;
+    --correct-color: #66bb6a;
+    --incorrect-color: #ff7961;
 }
 
 body {
     margin: 0;
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: all 0.3s ease;
@@ -125,7 +125,8 @@ input[type="text"] {
     margin-top: 20px;
 }
 
-#correct-score, #incorrect-score {
+#correct-score,
+#incorrect-score {
     font-size: 1.2rem;
     display: flex;
     align-items: center;
@@ -136,10 +137,17 @@ input[type="text"] {
     font-size: 1.5rem;
 }
 
-.dark-mode-toggle {
+.top-controls {
     position: fixed;
     top: 1rem;
     right: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.dark-mode-toggle,
+.lang-toggle {
     background-color: var(--card-bg);
     border: none;
     color: var(--text-color);
@@ -148,10 +156,13 @@ input[type="text"] {
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0px 4px 6px var(--card-shadow);
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
 }
 
-.dark-mode-toggle:hover {
+.dark-mode-toggle:hover,
+.lang-toggle:hover {
     background-color: var(--link-color);
     color: var(--bg-color);
 }

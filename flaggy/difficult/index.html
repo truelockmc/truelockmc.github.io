@@ -6,28 +6,51 @@
         <link rel="stylesheet" href="styles.css" />
     </head>
     <body>
-        <button class="dark-mode-toggle" onclick="toggleDarkMode()">
-            Toggle Dark Mode
-        </button>
+        <div class="top-controls">
+            <button
+                class="dark-mode-toggle"
+                onclick="toggleDarkMode()"
+                data-i18n="darkModeToggle"
+            >
+                Dunkelmodus
+            </button>
+            <button
+                class="lang-toggle"
+                onclick="toggleLang()"
+                data-i18n="langToggle"
+            >
+                EN
+            </button>
+        </div>
 
         <header>
-            <h1>Flaggen Lernen (BETA)</h1>
-            <p>Errate das Land anhand der Flagge!</p>
+            <h1 data-i18n="title">Flaggen Lernen (BETA)</h1>
+            <p data-i18n="subtitle">Errate das Land anhand der Flagge!</p>
         </header>
 
         <main>
             <div id="quiz-container">
                 <div id="flag-image-container">
-                    <img id="flag-image" src="" alt="Flagge" />
+                    <img
+                        id="flag-image"
+                        src=""
+                        data-i18n-alt="flagAlt"
+                        alt="Flagge"
+                    />
                 </div>
                 <input
                     type="text"
                     id="country-input"
-                    placeholder="Gib das Land ein..."
+                    data-i18n-placeholder="placeholder"
+                    placeholder="Gib das Land ein…"
                     autofocus
                 />
                 <div id="submit-container">
-                    <button id="submit-btn" class="answer-button">
+                    <button
+                        id="submit-btn"
+                        class="answer-button"
+                        data-i18n="submitBtn"
+                    >
                         Antwort Überprüfen
                     </button>
                 </div>
@@ -36,11 +59,13 @@
 
             <div id="score-container">
                 <p id="correct-score">
-                    <span class="score-icon">&#9989;</span> Richtige Antworten:
+                    <span class="score-icon">&#9989;</span>
+                    <span data-i18n="correctLabel">Richtige Antworten</span>:
                     <span id="correct-count">0</span>
                 </p>
                 <p id="incorrect-score">
-                    <span class="score-icon">&#10060;</span> Falsche Antworten:
+                    <span class="score-icon">&#10060;</span>
+                    <span data-i18n="incorrectLabel">Falsche Antworten</span>:
                     <span id="incorrect-count">0</span>
                 </p>
             </div>

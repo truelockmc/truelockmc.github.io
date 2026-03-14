@@ -1,68 +1,67 @@
 let correctAnswers = 0;
 let incorrectAnswers = 0;
 
-// Diese Funktion sorgt dafür, dass immer die nächste Frage angezeigt wird
 function displayQuestion() {
   const feedback = document.getElementById("feedback");
   const countryInput = document.getElementById("country-input");
   const flagImage = document.getElementById("flag-image");
   const submitBtn = document.getElementById("submit-btn");
 
-  feedback.style.display = "none"; // Verstecke Feedback
+  feedback.style.display = "none";
+  countryInput.value = "";
+  countryInput.focus();
 
-  countryInput.value = ""; // Leere das Textfeld
-  countryInput.focus(); // Fokus auf das Eingabefeld setzen
-
-  // Wähle eine zufällige Flagge und zeige sie an
   const randomIndex = Math.floor(Math.random() * flagData.length);
   const currentQuestion = flagData[randomIndex];
   flagImage.src = currentQuestion.flagUrl;
 
-  submitBtn.onclick = () =>
-    checkAnswer(countryInput.value, currentQuestion.country);
-  countryInput.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      checkAnswer(countryInput.value, currentQuestion.country);
-    }
+  // Neue Event-Handler setzen (alte klonen weg)
+  const newSubmit = submitBtn.cloneNode(true);
+  submitBtn.parentNode.replaceChild(newSubmit, submitBtn);
+  const newInput = countryInput.cloneNode(true);
+  countryInput.parentNode.replaceChild(newInput, countryInput);
+
+  newSubmit.onclick = () =>
+    checkAnswer(newInput.value, currentQuestion.country);
+  newInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") checkAnswer(newInput.value, currentQuestion.country);
   });
+  newInput.focus();
 }
 
-// Überprüft die Antwort des Benutzers
 function checkAnswer(input, correctCountry) {
   const feedback = document.getElementById("feedback");
-  const correctCount = document.getElementById("correct-count");
-  const incorrectCount = document.getElementById("incorrect-count");
-
+  const li = getLangIndex();
   const inputNormalized = input.trim().toLowerCase();
-  const correctAnswer = correctCountry.some(
+  // Akzeptiert beide Sprachen als korrekte Antwort
+  const isCorrect = correctCountry.some(
     (name) => name.toLowerCase() === inputNormalized,
   );
 
-  if (correctAnswer) {
+  if (isCorrect) {
     correctAnswers++;
-    correctCount.textContent = correctAnswers;
-    feedback.textContent = "Richtig! 😊";
+    document.getElementById("correct-count").textContent = correctAnswers;
+    feedback.textContent = t("correct");
     feedback.classList.remove("wrong-feedback");
     feedback.classList.add("correct-feedback");
-    feedback.style.display = "block";
   } else {
     incorrectAnswers++;
-    incorrectCount.textContent = incorrectAnswers;
-    feedback.textContent = `Falsch! Die richtige Antwort ist: ${correctCountry[0]} 😞`;
+    document.getElementById("incorrect-count").textContent = incorrectAnswers;
+    feedback.textContent = `${t("wrong")}: ${correctCountry[li]} 😞`;
     feedback.classList.remove("correct-feedback");
     feedback.classList.add("wrong-feedback");
-    feedback.style.display = "block";
   }
 
-  // Gehe zur nächsten Frage nach einer Verzögerung
-  setTimeout(() => {
-    displayQuestion();
-  }, 1500);
+  feedback.style.display = "block";
+  setTimeout(displayQuestion, 1500);
 }
 
 window.onload = () => {
-  const savedTheme = localStorage.getItem("theme") || "light";
-  document.documentElement.setAttribute("data-theme", savedTheme);
+  document.documentElement.setAttribute(
+    "data-theme",
+    localStorage.getItem("theme") || "light",
+  );
+  updatePageText();
   shuffleFlags();
   displayQuestion();
 };

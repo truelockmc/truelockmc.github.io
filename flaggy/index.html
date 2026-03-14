@@ -1,53 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:title" content="Flaggy - Flaggen Lernen" />
-    <meta property="og:description" content="Dieser online Open Source Flaggentrainer bietet dir viele Möglichkeiten besser im Flaggenraten zu werden (oder so, kp)" />
-    <meta property="og:image" content="https://github.com/truelockmc/truelockmc.github.io/blob/main/flaggy/preview.png?raw=true" />
-    <meta property="og:url" content="https://truelockmc.github.io/flaggy/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Flaggy" />
-    <link rel="stylesheet" href="styles.css">
-    <title>Flaggy - Flaggen Lernen</title>
-</head>
-<body>
-    <!-- Dunkelmodus Umschalter -->
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta property="og:title" content="Flaggy - Flaggen Lernen" />
+        <meta
+            property="og:description"
+            content="Dieser online Open Source Flaggentrainer bietet dir viele Möglichkeiten besser im Flaggenraten zu werden (oder so, kp)"
+        />
+        <meta
+            property="og:image"
+            content="https://github.com/truelockmc/truelockmc.github.io/blob/main/flaggy/preview.png?raw=true"
+        />
+        <meta
+            property="og:url"
+            content="https://truelockmc.github.io/flaggy/"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Flaggy" />
+        <link rel="stylesheet" href="styles.css" />
+        <title>Flaggy - Flaggen Lernen</title>
+    </head>
+    <body>
+        <!-- Dunkelmodus Umschalter -->
+        <button class="dark-mode-toggle" onclick="toggleDarkMode()">
+            Toggle Dark Mode
+        </button>
 
-    <header>
-        <h1>Flaggy</h1>
-        <p>Flaggen Lernen</p>
-        <small>by true_lock</small>
-    </header>
+        <header>
+            <h1>Flaggy</h1>
+            <p>Flaggen Lernen</p>
+            <small>by true_lock</small>
+        </header>
 
-    <main>
-        <div id="start-container">
-            <h2>Willkommen bei Flaggy!</h2>
-            <p>Teste dein Wissen und werde ein FlaGHGen Profi</p>
+        <main>
+            <div id="start-container">
+                <h2>Willkommen bei Flaggy!</h2>
+                <p>Teste dein Wissen und werde ein FlaGHGen Profi</p>
 
-            <div id="difficulty-buttons">
-                <button class="difficulty-button" onclick="window.location.href='https://truelockmc.github.io/flaggy/easy'">Easy</button>
-                <button class="difficulty-button" onclick="window.location.href='https://truelockmc.github.io/flaggy/difficult'">Difficult</button>
+                <div id="difficulty-buttons">
+                    <button
+                        class="difficulty-button"
+                        onclick="window.location.href = 'easy'"
+                    >
+                        Easy
+                    </button>
+                    <button
+                        class="difficulty-button"
+                        onclick="window.location.href = 'difficult'"
+                    >
+                        Difficult
+                    </button>
+                </div>
+
+                <img
+                    id="flag-image"
+                    src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fkinderbilder.download%2Fwp-content%2Fuploads%2F2020%2F06%2Finternational-welt-fahnen-kostenlose-vektorgrafik-auf-pixabay-bestimmt-fur-flaggen-der-welt-download-768x777.png&f=1&nofb=1&ipt=c4cc448af718e0294739bdc2d201b73c03435e5c859ff8cabbfa721fc44d4972&ipo=images"
+                    alt="Flaggen Fächer"
+                />
             </div>
+        </main>
 
-            <img id="flag-image" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fkinderbilder.download%2Fwp-content%2Fuploads%2F2020%2F06%2Finternational-welt-fahnen-kostenlose-vektorgrafik-auf-pixabay-bestimmt-fur-flaggen-der-welt-download-768x777.png&f=1&nofb=1&ipt=c4cc448af718e0294739bdc2d201b73c03435e5c859ff8cabbfa721fc44d4972&ipo=images" alt="Flaggen Fächer">
-        </div>
-    </main>
+        <!-- Footer mit Links -->
+        <footer>
+            <div id="footer-links">
+                <a href="https://github.com/truelockmc">Contact</a>
+                <a
+                    href="https://github.com/truelockmc/truelockmc.github.io/blob/main/README.md"
+                    >About</a
+                >
+                <a href="#help">Help</a>
+                <a href="#docs">Docs</a>
+                <a href="https://github.com/truelockmc/truelockmc.github.io"
+                    >GitHub / Code</a
+                >
+            </div>
+            <small>by true_lock</small>
+        </footer>
 
-    <!-- Footer mit Links -->
-    <footer>
-        <div id="footer-links">
-            <a href="https://github.com/truelockmc">Contact</a>
-            <a href="https://github.com/truelockmc/truelockmc.github.io/blob/main/README.md">About</a>
-            <a href="#help">Help</a>
-            <a href="#docs">Docs</a>
-            <a href="https://github.com/truelockmc/truelockmc.github.io">GitHub / Code</a>
-        </div>
-        <small>by true_lock</small>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
+        <script src="script.js"></script>
+    </body>
 </html>

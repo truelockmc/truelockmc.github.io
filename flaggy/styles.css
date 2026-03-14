@@ -1,18 +1,18 @@
 /* Base styles */
 :root {
     --bg-color: #0a0a0a; /* Dunkel, fast schwarz */
-    --text-color: #00FF00; /* Leuchtendes grün (Terminal-Style) */
+    --text-color: #00ff00; /* Leuchtendes grün (Terminal-Style) */
     --card-bg: #121212; /* Dunkles Grau für Karten */
     --card-shadow: rgba(0, 255, 0, 0.2); /* Grüne Schatten */
-    --link-color: #00FF00; /* Leuchtendes grün für Links */
-    --highlight-color: #FF0066; /* Neon Pink für Highlights */
+    --link-color: #00ff00; /* Leuchtendes grün für Links */
+    --highlight-color: #ff0066; /* Neon Pink für Highlights */
     --glow-color: rgba(0, 255, 0, 0.6); /* Grünes Leuchten */
     --border-color: rgba(0, 255, 0, 0.3); /* Neon-grüner Rand */
 }
 
 body {
     margin: 0;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: all 0.3s ease;
@@ -37,7 +37,9 @@ header h1 {
     font-size: 4rem;
     letter-spacing: 0.05em;
     color: var(--highlight-color);
-    text-shadow: 0 0 10px var(--highlight-color), 0 0 30px var(--glow-color);
+    text-shadow:
+        0 0 10px var(--highlight-color),
+        0 0 30px var(--glow-color);
 }
 
 header p {
@@ -45,7 +47,9 @@ header p {
     color: var(--link-color);
     margin-top: 1rem;
     letter-spacing: 0.03em;
-    text-shadow: 0 0 5px var(--glow-color), 0 0 15px var(--glow-color);
+    text-shadow:
+        0 0 5px var(--glow-color),
+        0 0 15px var(--glow-color);
 }
 
 header small {
@@ -69,7 +73,9 @@ header small {
     max-width: 900px;
     box-shadow: 0px 8px 20px var(--glow-color);
     border-radius: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 #flag-image:hover {
@@ -89,7 +95,10 @@ header small {
     font-size: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    transition:
+        background-color 0.3s,
+        transform 0.3s,
+        box-shadow 0.3s;
     box-shadow: 0 4px 8px var(--card-shadow);
 }
 
@@ -121,7 +130,9 @@ footer {
 footer small {
     color: var(--highlight-color);
     font-size: 1.2rem;
-    text-shadow: 0 0 10px var(--highlight-color), 0 0 20px var(--highlight-color);
+    text-shadow:
+        0 0 10px var(--highlight-color),
+        0 0 20px var(--highlight-color);
 }
 
 /* Dark Mode Toggle */
@@ -137,7 +148,10 @@ footer small {
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0px 5px 20px var(--glow-color);
-    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
 }
 
 .dark-mode-toggle:hover {
@@ -152,7 +166,9 @@ h2 {
     margin-top: 3rem;
     letter-spacing: 0.05em;
     color: var(--highlight-color);
-    text-shadow: 0 0 10px var(--highlight-color), 0 0 20px var(--glow-color);
+    text-shadow:
+        0 0 10px var(--highlight-color),
+        0 0 20px var(--glow-color);
 }
 
 #difficulty-buttons {
