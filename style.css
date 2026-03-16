@@ -1,3 +1,63 @@
+/* ── Self-hosted fonts ───────────────────────────────────── */
+@font-face {
+    font-family: "Bebas Neue";
+    src: url("fonts/BebasNeue-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Syne";
+    src: url("fonts/Syne-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Syne";
+    src: url("fonts/Syne-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "Syne";
+    src: url("fonts/Syne-ExtraBold.ttf") format("truetype");
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "DM Mono";
+    src: url("fonts/DMMono-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "DM Mono";
+    src: url("fonts/DMMono-LightItalic.ttf") format("truetype");
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+@font-face {
+    font-family: "DM Mono";
+    src: url("fonts/DMMono-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "DM Mono";
+    src: url("fonts/DMMono-Italic.ttf") format("truetype");
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -22,7 +82,7 @@ html {
 body {
     background: var(--bg);
     color: var(--text);
-    font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+    font-family: "Syne", sans-serif;
     overflow-x: hidden;
     cursor: none;
 }
@@ -37,7 +97,9 @@ body {
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s;
+    transition:
+        width 0.2s,
+        height 0.2s;
     mix-blend-mode: difference;
 }
 #cursor-ring {
@@ -49,7 +111,10 @@ body {
     pointer-events: none;
     z-index: 9998;
     transform: translate(-50%, -50%);
-    transition: width 0.3s, height 0.3s, opacity 0.3s;
+    transition:
+        width 0.3s,
+        height 0.3s,
+        opacity 0.3s;
     opacity: 0.5;
 }
 
@@ -76,7 +141,10 @@ nav {
     justify-content: space-between;
     padding: 1.4rem 3rem;
     border-bottom: 1px solid transparent;
-    transition: border-color 0.4s, background 0.4s, backdrop-filter 0.4s;
+    transition:
+        border-color 0.4s,
+        background 0.4s,
+        backdrop-filter 0.4s;
 }
 nav.scrolled {
     border-color: var(--border);
@@ -84,7 +152,7 @@ nav.scrolled {
     backdrop-filter: blur(12px);
 }
 .nav-logo {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 1.5rem;
     letter-spacing: 0.1em;
     color: var(--accent);
@@ -95,7 +163,7 @@ nav.scrolled {
     list-style: none;
 }
 .nav-links a {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -124,11 +192,15 @@ nav.scrolled {
         linear-gradient(var(--border) 1px, transparent 1px),
         linear-gradient(90deg, var(--border) 1px, transparent 1px);
     background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    mask-image: radial-gradient(
+        ellipse 80% 80% at 50% 50%,
+        black 30%,
+        transparent 100%
+    );
     opacity: 0.4;
 }
 .hero-tag {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -138,7 +210,7 @@ nav.scrolled {
     animation: fadeUp 0.7s 0.2s forwards;
 }
 .hero-name {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: clamp(5rem, 16vw, 14rem);
     line-height: 0.88;
     color: var(--text);
@@ -165,7 +237,7 @@ nav.scrolled {
     animation: fadeUp 0.9s 0.9s forwards;
 }
 .btn {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.75rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -175,7 +247,10 @@ nav.scrolled {
     border: 1px solid var(--accent);
     color: var(--bg);
     background: var(--accent);
-    transition: background 0.2s, color 0.2s, transform 0.15s;
+    transition:
+        background 0.2s,
+        color 0.2s,
+        transform 0.15s;
     display: inline-block;
 }
 .btn:hover {
@@ -196,7 +271,7 @@ nav.scrolled {
     position: absolute;
     bottom: 2.5rem;
     left: 3rem;
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -225,7 +300,7 @@ nav.scrolled {
     align-items: center;
 }
 .about-label {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.7rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -233,7 +308,7 @@ nav.scrolled {
     margin-bottom: 1.5rem;
 }
 .about-heading {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: clamp(2.5rem, 5vw, 4rem);
     line-height: 1;
     margin-bottom: 1.5rem;
@@ -253,20 +328,22 @@ nav.scrolled {
     border-radius: 6px;
     padding: 1.5rem;
     background: var(--surface);
-    transition: border-color 0.3s, transform 0.3s;
+    transition:
+        border-color 0.3s,
+        transform 0.3s;
 }
 .stat-box:hover {
     border-color: var(--accent);
     transform: translateY(-3px);
 }
 .stat-number {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 2.8rem;
     color: var(--accent);
     line-height: 1;
 }
 .stat-label {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.7rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -295,13 +372,20 @@ nav.scrolled {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    transition:
+        border-color 0.3s,
+        transform 0.3s,
+        box-shadow 0.3s;
 }
 .repo-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, transparent 60%, rgba(232, 160, 32, 0.05) 100%);
+    background: linear-gradient(
+        135deg,
+        transparent 60%,
+        rgba(232, 160, 32, 0.05) 100%
+    );
     opacity: 0;
     transition: opacity 0.4s;
     z-index: 1;
@@ -339,7 +423,7 @@ nav.scrolled {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 3rem;
     letter-spacing: 0.1em;
     color: var(--border);
@@ -366,7 +450,7 @@ nav.scrolled {
     gap: 0.5rem;
 }
 .repo-tag {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.62rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -376,7 +460,7 @@ nav.scrolled {
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     color: var(--accent);
@@ -388,7 +472,7 @@ nav.scrolled {
     flex-shrink: 0;
 }
 .repo-title {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 2rem;
     letter-spacing: 0.05em;
     transition: color 0.2s;
@@ -410,7 +494,7 @@ nav.scrolled {
     margin-top: 0.2rem;
 }
 .repo-topic {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.6rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -418,7 +502,7 @@ nav.scrolled {
     border: 1px solid var(--border);
     border-radius: 20px;
     color: var(--muted);
-    background: rgba(255,255,255,0.02);
+    background: rgba(255, 255, 255, 0.02);
 }
 .repo-footer {
     display: flex;
@@ -427,7 +511,7 @@ nav.scrolled {
     margin-top: 0.5rem;
 }
 .repo-arrow {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -437,7 +521,9 @@ nav.scrolled {
     gap: 0.5rem;
     opacity: 0;
     transform: translateX(-8px);
-    transition: opacity 0.3s, transform 0.3s;
+    transition:
+        opacity 0.3s,
+        transform 0.3s;
 }
 .repo-arrow::after {
     content: "->";
@@ -448,7 +534,7 @@ nav.scrolled {
     transform: translateX(0);
 }
 .repo-lang {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.65rem;
     color: var(--muted);
     display: flex;
@@ -478,7 +564,7 @@ nav.scrolled {
     flex-wrap: wrap;
 }
 .section-title {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: clamp(2.5rem, 5vw, 4rem);
     letter-spacing: 0.02em;
 }
@@ -496,8 +582,12 @@ nav.scrolled {
 
 /* ── Skeleton ────────────────────────────────────────────── */
 @keyframes shimmer {
-    0%   { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
 }
 .skeleton {
     min-height: 200px;
@@ -526,13 +616,20 @@ nav.scrolled {
     flex-direction: column;
     gap: 1rem;
     overflow: hidden;
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    transition:
+        border-color 0.3s,
+        transform 0.3s,
+        box-shadow 0.3s;
 }
 .page-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, transparent 60%, rgba(232, 160, 32, 0.05) 100%);
+    background: linear-gradient(
+        135deg,
+        transparent 60%,
+        rgba(232, 160, 32, 0.05) 100%
+    );
     opacity: 0;
     transition: opacity 0.4s;
 }
@@ -550,7 +647,7 @@ nav.scrolled {
     position: absolute;
     top: 1rem;
     right: 1rem;
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.55rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -571,22 +668,34 @@ nav.scrolled {
     font-size: 1.4rem;
     flex-shrink: 0;
 }
-.ci-0 { background: rgba(232, 160, 32, 0.12); }
-.ci-1 { background: rgba(62, 207, 207, 0.12); }
-.ci-2 { background: rgba(224, 60, 60, 0.12); }
-.ci-3 { background: rgba(130, 100, 240, 0.12); }
-.ci-4 { background: rgba(60, 200, 100, 0.12); }
-.ci-5 { background: rgba(200, 80, 180, 0.12); }
+.ci-0 {
+    background: rgba(232, 160, 32, 0.12);
+}
+.ci-1 {
+    background: rgba(62, 207, 207, 0.12);
+}
+.ci-2 {
+    background: rgba(224, 60, 60, 0.12);
+}
+.ci-3 {
+    background: rgba(130, 100, 240, 0.12);
+}
+.ci-4 {
+    background: rgba(60, 200, 100, 0.12);
+}
+.ci-5 {
+    background: rgba(200, 80, 180, 0.12);
+}
 
 .card-tag {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.62rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--muted);
 }
 .card-title {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 1.8rem;
     letter-spacing: 0.05em;
     transition: color 0.2s;
@@ -601,7 +710,7 @@ nav.scrolled {
     flex: 1;
 }
 .card-arrow {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -612,7 +721,9 @@ nav.scrolled {
     margin-top: 0.5rem;
     opacity: 0;
     transform: translateX(-8px);
-    transition: opacity 0.3s, transform 0.3s;
+    transition:
+        opacity 0.3s,
+        transform 0.3s;
 }
 .card-arrow::after {
     content: "->";
@@ -625,7 +736,7 @@ nav.scrolled {
 
 #pages-error {
     display: none;
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.75rem;
     color: var(--muted);
     margin-top: 1.5rem;
@@ -643,19 +754,19 @@ footer {
     justify-content: space-between;
 }
 .footer-logo {
-    font-family: "Impact", "Arial Narrow", Arial, sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 1.2rem;
     letter-spacing: 0.1em;
     color: var(--accent);
 }
 .footer-text {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.65rem;
     letter-spacing: 0.12em;
     color: var(--muted);
 }
 .footer-gh a {
-    font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+    font-family: "DM Mono", monospace;
     font-size: 0.65rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -679,7 +790,9 @@ footer {
 .reveal {
     opacity: 0;
     transform: translateY(28px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
+    transition:
+        opacity 0.7s ease,
+        transform 0.7s ease;
 }
 .reveal.visible {
     opacity: 1;
@@ -688,16 +801,33 @@ footer {
 
 /* ── Keyframes ───────────────────────────────────────────── */
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 @keyframes scrollPulse {
-    0%, 100% { opacity: 0.4; width: 30px; }
-    50%      { opacity: 1;   width: 50px; }
+    0%,
+    100% {
+        opacity: 0.4;
+        width: 30px;
+    }
+    50% {
+        opacity: 1;
+        width: 50px;
+    }
 }
 
 /* ── Responsive ──────────────────────────────────────────── */
