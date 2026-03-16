@@ -550,6 +550,196 @@ nav.scrolled {
     flex-shrink: 0;
 }
 
+/* ── Contributions ───────────────────────────────────────── */
+#contributions {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.contrib-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.contrib-item {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1rem 1.4rem;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    background: var(--surface);
+    transition: background 0.2s;
+    opacity: 0;
+    transform: translateY(12px);
+    transition:
+        background 0.2s,
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+.contrib-item.visible {
+    opacity: 1;
+    transform: none;
+}
+.contrib-list li:last-child .contrib-item {
+    border-bottom: none;
+}
+.contrib-item:hover {
+    background: #161616;
+}
+.contrib-rank {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.1rem;
+    color: var(--border);
+    width: 1.6rem;
+    text-align: center;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.contrib-item:nth-child(1) .contrib-rank {
+    color: var(--accent);
+}
+.contrib-item:nth-child(2) .contrib-rank {
+    color: #aaa;
+}
+.contrib-item:nth-child(3) .contrib-rank {
+    color: #a07050;
+}
+.contrib-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background: var(--border);
+    object-fit: cover;
+    display: block;
+}
+.contrib-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+.contrib-name {
+    font-family: "DM Mono", monospace;
+    font-size: 0.8rem;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.contrib-name .contrib-owner {
+    color: var(--muted);
+}
+.contrib-name .contrib-repo {
+    color: var(--text);
+    transition: color 0.2s;
+}
+.contrib-item:hover .contrib-repo {
+    color: var(--accent);
+}
+.contrib-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+}
+.contrib-right {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    flex-shrink: 0;
+}
+.contrib-pr-count {
+    font-family: "DM Mono", monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    border: 1px solid rgba(232, 160, 32, 0.3);
+    border-radius: 20px;
+    padding: 0.15rem 0.55rem;
+    background: rgba(232, 160, 32, 0.07);
+    white-space: nowrap;
+}
+.contrib-lang {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: "DM Mono", monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+}
+.contrib-stars {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: "DM Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    min-width: 3rem;
+    justify-content: flex-end;
+}
+.contrib-stars svg {
+    width: 11px;
+    height: 11px;
+    fill: var(--muted);
+    flex-shrink: 0;
+    transition: fill 0.2s;
+}
+.contrib-item:hover .contrib-stars svg {
+    fill: var(--accent);
+}
+.contrib-item:hover .contrib-stars {
+    color: var(--accent);
+}
+.contrib-arrow {
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    color: var(--border);
+    transition:
+        color 0.2s,
+        transform 0.2s;
+}
+.contrib-item:hover .contrib-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+}
+.contrib-skeleton {
+    height: 58px;
+    background: linear-gradient(
+        90deg,
+        var(--surface) 25%,
+        #1a1a1a 50%,
+        var(--surface) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    border-bottom: 1px solid var(--border);
+}
+.contrib-skeleton:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    #contributions {
+        padding: 4rem 1.5rem;
+    }
+    .contrib-lang {
+        display: none;
+    }
+    .contrib-right {
+        gap: 0.8rem;
+    }
+}
+
 /* ── Pages section ───────────────────────────────────────── */
 #pages {
     padding: 6rem 3rem 10rem;
