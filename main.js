@@ -327,12 +327,17 @@ async function loadContributions() {
 
   try {
     // Search for all merged PRs by truelockmc on repos they don't own
+    const q = encodeURIComponent(
+      "type:pr author:truelockmc is:merged -user:truelockmc",
+    );
     const searchUrl =
-      "https://api.github.com/search/issues" +
-      "?q=type:pr+author:truelockmc+is:merged+-user:truelockmc" +
+      "https://api.github.com/search/issues?q=" +
+      q +
       "&per_page=100&sort=updated";
 
-    const r = await fetch(searchUrl);
+    const r = await fetch(searchUrl, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
     if (!r.ok) throw new Error("HTTP " + r.status);
     const data = await r.json();
 
