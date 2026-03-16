@@ -4,619 +4,19 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>true_lock</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap"
-            rel="stylesheet"
-        />
-        <style>
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
-
-            :root {
-                --bg: #080808;
-                --surface: #111111;
-                --border: #222222;
-                --text: #ede8df;
-                --muted: #5a5650;
-                --accent: #e8a020;
-            }
-
-            html {
-                scroll-behavior: smooth;
-            }
-
-            body {
-                background: var(--bg);
-                color: var(--text);
-                font-family: "Syne", sans-serif;
-                overflow-x: hidden;
-                cursor: none;
-            }
-
-            /* cursor */
-            #cursor {
-                position: fixed;
-                width: 10px;
-                height: 10px;
-                background: var(--accent);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9999;
-                transform: translate(-50%, -50%);
-                transition:
-                    width 0.2s,
-                    height 0.2s;
-                mix-blend-mode: difference;
-            }
-            #cursor-ring {
-                position: fixed;
-                width: 36px;
-                height: 36px;
-                border: 1.5px solid var(--accent);
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9998;
-                transform: translate(-50%, -50%);
-                transition:
-                    width 0.3s,
-                    height 0.3s,
-                    opacity 0.3s;
-                opacity: 0.5;
-            }
-
-            /* noise overlay */
-            body::before {
-                content: "";
-                position: fixed;
-                inset: 0;
-                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
-                pointer-events: none;
-                z-index: 1000;
-                opacity: 0.35;
-            }
-
-            /* nav */
-            nav {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 900;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 1.4rem 3rem;
-                border-bottom: 1px solid transparent;
-                transition:
-                    border-color 0.4s,
-                    background 0.4s,
-                    backdrop-filter 0.4s;
-            }
-            nav.scrolled {
-                border-color: var(--border);
-                background: rgba(8, 8, 8, 0.85);
-                backdrop-filter: blur(12px);
-            }
-            .nav-logo {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: 1.5rem;
-                letter-spacing: 0.1em;
-                color: var(--accent);
-            }
-            .nav-links {
-                display: flex;
-                gap: 2rem;
-                list-style: none;
-            }
-            .nav-links a {
-                font-family: "DM Mono", monospace;
-                font-size: 0.75rem;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: var(--muted);
-                text-decoration: none;
-                transition: color 0.2s;
-            }
-            .nav-links a:hover {
-                color: var(--text);
-            }
-
-            /* hero */
-            #hero {
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 0 3rem;
-                position: relative;
-                overflow: hidden;
-            }
-            .hero-grid-bg {
-                position: absolute;
-                inset: 0;
-                background-image:
-                    linear-gradient(var(--border) 1px, transparent 1px),
-                    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-                background-size: 60px 60px;
-                mask-image: radial-gradient(
-                    ellipse 80% 80% at 50% 50%,
-                    black 30%,
-                    transparent 100%
-                );
-                opacity: 0.4;
-            }
-            .hero-tag {
-                font-family: "DM Mono", monospace;
-                font-size: 0.75rem;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: var(--accent);
-                margin-bottom: 1.5rem;
-                opacity: 0;
-                animation: fadeUp 0.7s 0.2s forwards;
-            }
-            .hero-name {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: clamp(5rem, 16vw, 14rem);
-                line-height: 0.88;
-                color: var(--text);
-                opacity: 0;
-                animation: fadeUp 0.9s 0.4s forwards;
-            }
-            .hero-name span {
-                color: var(--accent);
-            }
-            .hero-sub {
-                margin-top: 2.5rem;
-                max-width: 480px;
-                font-size: 1rem;
-                line-height: 1.7;
-                color: var(--muted);
-                opacity: 0;
-                animation: fadeUp 0.9s 0.7s forwards;
-            }
-            .hero-cta {
-                margin-top: 3rem;
-                display: flex;
-                gap: 1rem;
-                opacity: 0;
-                animation: fadeUp 0.9s 0.9s forwards;
-            }
-            .btn {
-                font-family: "DM Mono", monospace;
-                font-size: 0.75rem;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                text-decoration: none;
-                padding: 0.85rem 2rem;
-                border-radius: 3px;
-                border: 1px solid var(--accent);
-                color: var(--bg);
-                background: var(--accent);
-                transition:
-                    background 0.2s,
-                    color 0.2s,
-                    transform 0.15s;
-                display: inline-block;
-            }
-            .btn:hover {
-                background: transparent;
-                color: var(--accent);
-                transform: translateY(-2px);
-            }
-            .btn-ghost {
-                background: transparent;
-                color: var(--muted);
-                border-color: var(--border);
-            }
-            .btn-ghost:hover {
-                color: var(--text);
-                border-color: var(--muted);
-            }
-            .hero-scroll-hint {
-                position: absolute;
-                bottom: 2.5rem;
-                left: 3rem;
-                font-family: "DM Mono", monospace;
-                font-size: 0.65rem;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: var(--muted);
-                display: flex;
-                align-items: center;
-                gap: 0.8rem;
-                opacity: 0;
-                animation: fadeIn 1s 1.5s forwards;
-            }
-            .scroll-line {
-                width: 40px;
-                height: 1px;
-                background: var(--muted);
-                animation: scrollPulse 2s 2s infinite;
-            }
-
-            /* about */
-            #about {
-                padding: 8rem 3rem;
-                max-width: 1100px;
-                margin: 0 auto;
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 6rem;
-                align-items: center;
-            }
-            .about-label {
-                font-family: "DM Mono", monospace;
-                font-size: 0.7rem;
-                letter-spacing: 0.2em;
-                text-transform: uppercase;
-                color: var(--accent);
-                margin-bottom: 1.5rem;
-            }
-            .about-heading {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: clamp(2.5rem, 5vw, 4rem);
-                line-height: 1;
-                margin-bottom: 1.5rem;
-            }
-            .about-text {
-                font-size: 0.95rem;
-                line-height: 1.85;
-                color: var(--muted);
-            }
-            .about-stats {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 1.5rem;
-            }
-            .stat-box {
-                border: 1px solid var(--border);
-                border-radius: 6px;
-                padding: 1.5rem;
-                background: var(--surface);
-                transition:
-                    border-color 0.3s,
-                    transform 0.3s;
-            }
-            .stat-box:hover {
-                border-color: var(--accent);
-                transform: translateY(-3px);
-            }
-            .stat-number {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: 2.8rem;
-                color: var(--accent);
-                line-height: 1;
-            }
-            .stat-label {
-                font-family: "DM Mono", monospace;
-                font-size: 0.7rem;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: var(--muted);
-                margin-top: 0.4rem;
-            }
-
-            /* pages section */
-            #pages {
-                padding: 6rem 3rem 10rem;
-                max-width: 1100px;
-                margin: 0 auto;
-            }
-            .section-header {
-                display: flex;
-                align-items: baseline;
-                gap: 1.5rem;
-                margin-bottom: 3rem;
-                flex-wrap: wrap;
-            }
-            .section-title {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: clamp(2.5rem, 5vw, 4rem);
-                letter-spacing: 0.02em;
-            }
-            .section-line {
-                flex: 1;
-                height: 1px;
-                background: var(--border);
-                min-width: 20px;
-            }
-
-            .pages-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 1.5rem;
-            }
-
-            /* skeleton */
-            @keyframes shimmer {
-                0% {
-                    background-position: 200% 0;
-                }
-                100% {
-                    background-position: -200% 0;
-                }
-            }
-            .skeleton {
-                min-height: 200px;
-                border-radius: 8px;
-                border: 1px solid var(--border);
-                background: linear-gradient(
-                    90deg,
-                    var(--surface) 25%,
-                    #1a1a1a 50%,
-                    var(--surface) 75%
-                );
-                background-size: 200% 100%;
-                animation: shimmer 1.6s infinite;
-            }
-
-            /* cards */
-            .page-card {
-                position: relative;
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                background: var(--surface);
-                padding: 2.2rem;
-                text-decoration: none;
-                color: var(--text);
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                overflow: hidden;
-                transition:
-                    border-color 0.3s,
-                    transform 0.3s,
-                    box-shadow 0.3s;
-            }
-            .page-card::before {
-                content: "";
-                position: absolute;
-                inset: 0;
-                background: linear-gradient(
-                    135deg,
-                    transparent 60%,
-                    rgba(232, 160, 32, 0.05) 100%
-                );
-                opacity: 0;
-                transition: opacity 0.4s;
-            }
-            .page-card:hover::before {
-                opacity: 1;
-            }
-            .page-card:hover {
-                border-color: var(--accent);
-                transform: translateY(-6px);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-            }
-
-            /* pinned badge */
-            .pin-badge {
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-                font-family: "DM Mono", monospace;
-                font-size: 0.55rem;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: var(--accent);
-                border: 1px solid rgba(232, 160, 32, 0.3);
-                border-radius: 20px;
-                padding: 0.2rem 0.6rem;
-                background: rgba(232, 160, 32, 0.07);
-            }
-
-            .card-icon {
-                width: 48px;
-                height: 48px;
-                border-radius: 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.4rem;
-                flex-shrink: 0;
-            }
-            .ci-0 {
-                background: rgba(232, 160, 32, 0.12);
-            }
-            .ci-1 {
-                background: rgba(62, 207, 207, 0.12);
-            }
-            .ci-2 {
-                background: rgba(224, 60, 60, 0.12);
-            }
-            .ci-3 {
-                background: rgba(130, 100, 240, 0.12);
-            }
-            .ci-4 {
-                background: rgba(60, 200, 100, 0.12);
-            }
-            .ci-5 {
-                background: rgba(200, 80, 180, 0.12);
-            }
-
-            .card-tag {
-                font-family: "DM Mono", monospace;
-                font-size: 0.62rem;
-                letter-spacing: 0.15em;
-                text-transform: uppercase;
-                color: var(--muted);
-            }
-            .card-title {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: 1.8rem;
-                letter-spacing: 0.05em;
-                transition: color 0.2s;
-            }
-            .page-card:hover .card-title {
-                color: var(--accent);
-            }
-            .card-desc {
-                font-size: 0.88rem;
-                line-height: 1.7;
-                color: var(--muted);
-                flex: 1;
-            }
-            .card-arrow {
-                font-family: "DM Mono", monospace;
-                font-size: 0.72rem;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                color: var(--accent);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                margin-top: 0.5rem;
-                opacity: 0;
-                transform: translateX(-8px);
-                transition:
-                    opacity 0.3s,
-                    transform 0.3s;
-            }
-            .card-arrow::after {
-                content: "->";
-                font-size: 1rem;
-            }
-            .page-card:hover .card-arrow {
-                opacity: 1;
-                transform: translateX(0);
-            }
-
-            #pages-error {
-                display: none;
-                font-family: "DM Mono", monospace;
-                font-size: 0.75rem;
-                color: var(--muted);
-                margin-top: 1.5rem;
-            }
-            #pages-error a {
-                color: var(--accent);
-            }
-
-            /* footer */
-            footer {
-                border-top: 1px solid var(--border);
-                padding: 2.5rem 3rem;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-            .footer-logo {
-                font-family: "Bebas Neue", sans-serif;
-                font-size: 1.2rem;
-                letter-spacing: 0.1em;
-                color: var(--accent);
-            }
-            .footer-text {
-                font-family: "DM Mono", monospace;
-                font-size: 0.65rem;
-                letter-spacing: 0.12em;
-                color: var(--muted);
-            }
-            .footer-gh a {
-                font-family: "DM Mono", monospace;
-                font-size: 0.65rem;
-                letter-spacing: 0.12em;
-                text-transform: uppercase;
-                color: var(--muted);
-                text-decoration: none;
-                transition: color 0.2s;
-            }
-            .footer-gh a:hover {
-                color: var(--text);
-            }
-
-            .divider {
-                max-width: 1100px;
-                margin: 0 auto;
-                height: 1px;
-                background: var(--border);
-            }
-
-            .reveal {
-                opacity: 0;
-                transform: translateY(28px);
-                transition:
-                    opacity 0.7s ease,
-                    transform 0.7s ease;
-            }
-            .reveal.visible {
-                opacity: 1;
-                transform: none;
-            }
-
-            @keyframes fadeUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-            @keyframes scrollPulse {
-                0%,
-                100% {
-                    opacity: 0.4;
-                    width: 30px;
-                }
-                50% {
-                    opacity: 1;
-                    width: 50px;
-                }
-            }
-
-            @media (max-width: 768px) {
-                nav {
-                    padding: 1.2rem 1.5rem;
-                }
-                .nav-links {
-                    display: none;
-                }
-                #hero {
-                    padding: 0 1.5rem;
-                }
-                #about {
-                    grid-template-columns: 1fr;
-                    gap: 3rem;
-                    padding: 5rem 1.5rem;
-                }
-                #pages {
-                    padding: 4rem 1.5rem 7rem;
-                }
-                footer {
-                    flex-direction: column;
-                    gap: 1rem;
-                    text-align: center;
-                    padding: 2rem 1.5rem;
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="style.css" />
     </head>
     <body>
+        <!-- Custom cursor -->
         <div id="cursor"></div>
         <div id="cursor-ring"></div>
 
+        <!-- Navigation -->
         <nav id="nav">
             <div class="nav-logo">true_lock</div>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
+                <li><a href="#repos">Top Repos</a></li>
                 <li><a href="#pages">Pages</a></li>
                 <li>
                     <a href="https://github.com/truelockmc" target="_blank"
@@ -626,6 +26,7 @@
             </ul>
         </nav>
 
+        <!-- ── Hero ────────────────────────────────────────────── -->
         <section id="hero">
             <div class="hero-grid-bg"></div>
             <div class="hero-tag">
@@ -637,7 +38,7 @@
                 sometimes JavaScript, always open source.
             </p>
             <div class="hero-cta">
-                <a href="#pages" class="btn">See what I made</a>
+                <a href="#repos" class="btn">See what I made</a>
                 <a
                     href="https://github.com/truelockmc"
                     target="_blank"
@@ -653,6 +54,7 @@
 
         <div class="divider"></div>
 
+        <!-- ── About ────────────────────────────────────────────── -->
         <section id="about">
             <div class="reveal">
                 <div class="about-label">// About me</div>
@@ -663,8 +65,9 @@
                     start with a problem I had and couldn't find a good solution
                     for.
                 </p>
-                So, i made it myself
-                <p class="about-text" style="margin-top: 1rem"></p>
+                <p class="about-text" style="margin-top: 1rem">
+                    So, I made it myself.
+                </p>
             </div>
             <div class="about-stats reveal" style="transition-delay: 0.15s">
                 <div class="stat-box">
@@ -680,14 +83,55 @@
                     <div class="stat-label">Primary Language</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-number">OSS</div>
-                    <div class="stat-label">Open Source</div>
+                    <div class="stat-number" id="repos-star-total">—</div>
+                    <div class="stat-label">Total Stars</div>
                 </div>
             </div>
         </section>
 
         <div class="divider"></div>
 
+        <!-- ── Top Repos ─────────────────────────────────────────── -->
+        <section id="repos">
+            <div class="section-header reveal">
+                <h2 class="section-title">Top Repos</h2>
+                <div class="section-line"></div>
+                <span
+                    style="
+                        font-family:
+                            &quot;SF Mono&quot;, &quot;Fira Code&quot;,
+                            &quot;Consolas&quot;, monospace;
+                        font-size: 0.7rem;
+                        color: var(--muted);
+                        white-space: nowrap;
+                        flex-shrink: 0;
+                    "
+                    >// sorted by stars</span
+                >
+            </div>
+            <div class="repos-grid" id="repos-grid">
+                <div
+                    class="skeleton"
+                    style="aspect-ratio: 2/1; min-height: unset"
+                ></div>
+                <div
+                    class="skeleton"
+                    style="aspect-ratio: 2/1; min-height: unset"
+                ></div>
+                <div
+                    class="skeleton"
+                    style="aspect-ratio: 2/1; min-height: unset"
+                ></div>
+                <div
+                    class="skeleton"
+                    style="aspect-ratio: 2/1; min-height: unset"
+                ></div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- ── Pages ─────────────────────────────────────────────── -->
         <section id="pages">
             <div class="section-header reveal">
                 <h2 class="section-title">All Pages</h2>
@@ -695,7 +139,9 @@
                 <span
                     id="pages-count"
                     style="
-                        font-family: &quot;DM Mono&quot;, monospace;
+                        font-family:
+                            &quot;SF Mono&quot;, &quot;Fira Code&quot;,
+                            &quot;Consolas&quot;, monospace;
                         font-size: 0.7rem;
                         color: var(--muted);
                         white-space: nowrap;
@@ -719,6 +165,7 @@
             </p>
         </section>
 
+        <!-- ── Footer ────────────────────────────────────────────── -->
         <footer>
             <div class="footer-logo">true_lock</div>
             <div class="footer-text">
@@ -733,251 +180,6 @@
             </div>
         </footer>
 
-        <script>
-            // ── Cursor ─────────────────────────────────────────────
-            const cursor = document.getElementById("cursor");
-            const ring = document.getElementById("cursor-ring");
-            let mx = 0,
-                my = 0,
-                rx = 0,
-                ry = 0;
-
-            document.addEventListener("mousemove", (e) => {
-                mx = e.clientX;
-                my = e.clientY;
-                cursor.style.left = mx + "px";
-                cursor.style.top = my + "px";
-            });
-            (function loop() {
-                rx += (mx - rx) * 0.12;
-                ry += (my - ry) * 0.12;
-                ring.style.left = rx + "px";
-                ring.style.top = ry + "px";
-                requestAnimationFrame(loop);
-            })();
-
-            function wireCursor() {
-                document.querySelectorAll("a,button").forEach((el) => {
-                    el.addEventListener("mouseenter", () => {
-                        cursor.style.width = ring.style.width = "54px";
-                        cursor.style.height = ring.style.height = "54px";
-                        ring.style.opacity = "0.8";
-                    });
-                    el.addEventListener("mouseleave", () => {
-                        cursor.style.width = "10px";
-                        cursor.style.height = "10px";
-                        ring.style.width = "36px";
-                        ring.style.height = "36px";
-                        ring.style.opacity = "0.5";
-                    });
-                });
-            }
-            wireCursor();
-
-            // ── Nav ────────────────────────────────────────────────
-            window.addEventListener("scroll", () =>
-                document
-                    .getElementById("nav")
-                    .classList.toggle("scrolled", scrollY > 40),
-            );
-
-            // ── Reveal ─────────────────────────────────────────────
-            const obs = new IntersectionObserver(
-                (entries) => {
-                    entries.forEach((e) => {
-                        if (e.isIntersecting) {
-                            e.target.classList.add("visible");
-                            obs.unobserve(e.target);
-                        }
-                    });
-                },
-                { threshold: 0.12 },
-            );
-            document
-                .querySelectorAll(".reveal")
-                .forEach((el) => obs.observe(el));
-
-            // ── Pinned cards (always first) ────────────────────────
-            const PINNED = [
-                {
-                    name: "flaggy",
-                    url: "https://truelockmc.github.io/flaggy/",
-                    title: "Flaggy",
-                    desc: "A flag quiz I built to stop getting embarrassed at geography questions. Covers pretty much every country.",
-                    emoji: "&#x1F3F3;&#xFE0F;",
-                    tag: "Quiz / Geography",
-                    ci: 0,
-                },
-                {
-                    name: "games",
-                    url: "https://truelockmc.github.io/games/",
-                    title: "Games",
-                    desc: "A small collection of browser games. Runs in the tab, no install needed.",
-                    emoji: "&#x1F579;&#xFE0F;",
-                    tag: "Browser / Games",
-                    ci: 1,
-                },
-            ];
-
-            const EMOJIS = [
-                "&#x1F310;",
-                "&#x26A1;",
-                "&#x1F579;",
-                "&#x1F527;",
-                "&#x1F6E1;",
-                "&#x1F4E1;",
-                "&#x1F52C;",
-                "&#x1F4E6;",
-                "&#x1F5C2;",
-                "&#x1F680;",
-                "&#x1F3AF;",
-                "&#x1F4A1;",
-                "&#x1F510;",
-                "&#x1F5A5;",
-            ];
-
-            function makeCard(cfg, idx, pinned) {
-                const a = document.createElement("a");
-                a.href = cfg.url;
-                a.target = "_blank";
-                a.rel = "noopener";
-                a.className = "page-card reveal";
-                a.style.transitionDelay = (idx * 0.07).toFixed(2) + "s";
-
-                const badge = pinned
-                    ? '<span class="pin-badge">&#x2605; featured</span>'
-                    : "";
-                const tag =
-                    cfg.tag ||
-                    (cfg.language || "Web") + " &middot; GitHub Pages";
-
-                a.innerHTML =
-                    badge +
-                    '<div class="card-icon ci-' +
-                    cfg.ci +
-                    '">' +
-                    cfg.emoji +
-                    "</div>" +
-                    '<div class="card-tag">// ' +
-                    tag +
-                    "</div>" +
-                    '<div class="card-title">' +
-                    cfg.title +
-                    "</div>" +
-                    '<p class="card-desc">' +
-                    cfg.desc +
-                    "</p>" +
-                    '<div class="card-arrow">Visit page</div>';
-                return a;
-            }
-
-            // ── Load dynamic pages ─────────────────────────────────
-            async function loadPages() {
-                const grid = document.getElementById("pages-grid");
-                const errEl = document.getElementById("pages-error");
-                const cntEl = document.getElementById("count-repos");
-                const lblEl = document.getElementById("pages-count");
-
-                try {
-                    let repos = [],
-                        page = 1;
-                    while (true) {
-                        const r = await fetch(
-                            "https://api.github.com/users/truelockmc/repos?per_page=100&page=" +
-                                page,
-                        );
-                        if (!r.ok) throw new Error("HTTP " + r.status);
-                        const batch = await r.json();
-                        repos = repos.concat(batch);
-                        if (batch.length < 100) break;
-                        page++;
-                    }
-
-                    // Animate total repo count
-                    const total = repos.length;
-                    let n = 0;
-                    (function tick() {
-                        n = Math.min(n + Math.ceil(total / 20), total);
-                        cntEl.textContent = n;
-                        if (n < total) requestAnimationFrame(tick);
-                    })();
-
-                    // Filter pages repos, exclude the ones we pin manually
-                    const pinnedNames = new Set(PINNED.map((p) => p.name));
-                    const dynamic = repos
-                        .filter(
-                            (r) =>
-                                r.has_pages &&
-                                !pinnedNames.has(r.name) &&
-                                r.name !== "truelockmc.github.io",
-                        )
-                        .sort((a, b) => a.name.localeCompare(b.name));
-
-                    // Total live pages = pinned + dynamic + root
-                    const rootRepo = repos.find(
-                        (r) => r.name === "truelockmc.github.io",
-                    );
-                    const totalPages =
-                        PINNED.length +
-                        dynamic.length +
-                        (rootRepo?.has_pages ? 1 : 0);
-                    if (lblEl) lblEl.textContent = totalPages + " live pages";
-
-                    // Render grid
-                    grid.innerHTML = "";
-
-                    // 1. Pinned first
-                    PINNED.forEach((cfg, i) => {
-                        const card = makeCard(cfg, i, true);
-                        grid.appendChild(card);
-                        obs.observe(card);
-                    });
-
-                    // 2. Dynamic repos after
-                    dynamic.forEach((repo, i) => {
-                        const idx = PINNED.length + i;
-                        const cfg = {
-                            url:
-                                "https://truelockmc.github.io/" +
-                                repo.name +
-                                "/",
-                            title: repo.name.replace(/-/g, " "),
-                            desc:
-                                repo.description ||
-                                "A hosted page — click to explore.",
-                            emoji: EMOJIS[idx % EMOJIS.length],
-                            ci: idx % 6,
-                            tag:
-                                (repo.language || "Web") +
-                                " &middot; GitHub Pages",
-                        };
-                        const card = makeCard(cfg, idx, false);
-                        grid.appendChild(card);
-                        obs.observe(card);
-                    });
-
-                    // 3. Nothing found edge case
-                    if (grid.children.length === 0) {
-                        grid.innerHTML =
-                            "<p style=\"font-family:'DM Mono',monospace;font-size:.8rem;color:var(--muted)\">// No pages found.</p>";
-                    }
-
-                    wireCursor();
-                } catch (err) {
-                    console.error(err);
-                    grid.innerHTML = "";
-                    // Still render pinned even if API fails
-                    PINNED.forEach((cfg, i) => {
-                        const card = makeCard(cfg, i, true);
-                        grid.appendChild(card);
-                        obs.observe(card);
-                    });
-                    errEl.style.display = "block";
-                    wireCursor();
-                }
-            }
-
-            loadPages();
-        </script>
+        <script src="main.js"></script>
     </body>
 </html>
