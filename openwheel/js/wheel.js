@@ -250,11 +250,11 @@ class WheelRenderer {
     if (chord < 5) return; // segment too narrow
 
     // ── Font-size search ─────────────────────────────────────────────────────
+    // No hard pixel cap: if space is available the text fills it naturally.
     const MIN_FS = 7;
     const MAX_FS = Math.min(
-      chord * 0.5, // at most half the angular chord per line
-      r * 0.13, // scale with wheel size
-      18, // hard cap (no need to go bigger)
+      chord * 0.55, // up to 55 % of the angular chord per line
+      r * 0.18, // proportional to wheel radius
     );
 
     let fs = Math.max(MIN_FS, MAX_FS);
@@ -272,7 +272,7 @@ class WheelRenderer {
       const heightOk = totalH <= chord;
       const widthOk = maxLineW <= textR;
 
-      if (heightOk && widthOk) break;
+      if (heightOk && widthOk) break; // fits
 
       if (fs <= MIN_FS) break; // can't shrink further
 
