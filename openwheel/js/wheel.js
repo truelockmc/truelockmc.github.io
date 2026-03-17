@@ -48,12 +48,10 @@ function _luminance(hex) {
     .reduce((acc, c, i) => acc + [0.2126, 0.7152, 0.0722][i] * c, 0);
 }
 
-/** Return white or near-black depending on segment luminance. */
 function _textColor(bgHex) {
   return _luminance(bgHex) > 0.32 ? "#1a1916" : "#ffffff";
 }
 
-/** Subtle drop-shadow colour that contrasts with the background. */
 function _shadowColor(bgHex) {
   return _luminance(bgHex) > 0.32
     ? "rgba(255,255,255,0.6)"
@@ -62,19 +60,12 @@ function _shadowColor(bgHex) {
 
 // ─── Text helpers ─────────────────────────────────────────────────────────────
 
-/**
- * Word-wrap `text` into lines that each fit within `maxWidth` pixels.
- * Falls back to a single-item array if no spaces exist.
- */
 function _wrapText(ctx, text, maxWidth) {
   if (ctx.measureText(text).width <= maxWidth) return [text];
-
   const words = text.split(/\s+/);
-  if (words.length === 1) return [text]; // can't wrap a single word
-
+  if (words.length === 1) return [text];
   const lines = [];
   let current = "";
-
   for (const word of words) {
     const test = current ? current + " " + word : word;
     if (ctx.measureText(test).width <= maxWidth) {
@@ -99,8 +90,6 @@ class WheelRenderer {
     this._running = false;
   }
 
-  // ── Public draw ────────────────────────────────────────────────────────────
-
   draw(entries) {
     const { canvas, ctx } = this;
     const W = canvas.width;
@@ -112,7 +101,18 @@ class WheelRenderer {
     ctx.clearRect(0, 0, W, H);
 
     if (!entries || entries.length === 0) {
-      this._drawEmpty(ctx, cx, cy, r);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, TWO_PI);
+      ctx.fillStyle = "#ece8e0";
+      ctx.fill();
+      ctx.strokeStyle = "#d0ccc4";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.fillStyle = "#9a9794";
+      ctx.font = `14px ${SANS}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("No entries yet", cx, cy);
       return;
     }
 
@@ -120,24 +120,23 @@ class WheelRenderer {
     const arc = TWO_PI / n;
     const capR = Math.max(12, r * 0.075);
 
-    // Ambient shadow behind the whole wheel
+    // Drop shadow behind wheel
     ctx.save();
-    ctx.shadowColor = "rgba(0,0,0,0.25)";
-    ctx.shadowBlur = 24;
+    ctx.shadowColor = "rgba(0,0,0,0.22)";
+    ctx.shadowBlur = 20;
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, TWO_PI);
     ctx.fillStyle = "#000";
     ctx.fill();
     ctx.restore();
 
-    // Segments + labels
     for (let i = 0; i < n; i++) {
       const startAngle = this.rotation + i * arc;
       const endAngle = startAngle + arc;
       const midAngle = startAngle + arc / 2;
       const color = SEGMENT_COLORS[i % SEGMENT_COLORS.length];
 
-      // Filled segment
+      // Segment
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.arc(cx, cy, r, startAngle, endAngle);
@@ -152,23 +151,22 @@ class WheelRenderer {
       this._drawLabel(ctx, entries[i], cx, cy, r, capR, arc, midAngle, color);
     }
 
-    // Outer gloss ring
+    // Outer ring highlight
     ctx.beginPath();
     ctx.arc(cx, cy, r, 0, TWO_PI);
-    ctx.strokeStyle = "rgba(255,255,255,0.20)";
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
     ctx.lineWidth = 3;
     ctx.stroke();
 
     // Centre cap
     ctx.save();
-    ctx.shadowColor = "rgba(0,0,0,0.22)";
-    ctx.shadowBlur = 8;
+    ctx.shadowColor = "rgba(0,0,0,0.2)";
+    ctx.shadowBlur = 6;
     ctx.beginPath();
     ctx.arc(cx, cy, capR, 0, TWO_PI);
     ctx.fillStyle = "#ffffff";
     ctx.fill();
     ctx.restore();
-
     ctx.beginPath();
     ctx.arc(cx, cy, capR, 0, TWO_PI);
     ctx.strokeStyle = "#d0ccc4";
@@ -176,26 +174,35 @@ class WheelRenderer {
     ctx.stroke();
   }
 
-  // ── Spin ───────────────────────────────────────────────────────────────────
-
   spin(entries, onDone) {
     if (this._running || entries.length < 2) return;
     this._running = true;
 
-    const extraRot = (7 + Math.random() * 8) * TWO_PI;
-    const duration = 3600 + Math.random() * 1600; // 3.6-5.2 s
+    const extraRot = (6 + Math.random() * 8) * TWO_PI;
+    const duration = 3200 + Math.random() * 1800; // same as original
     const startRot = this.rotation;
     const targetRot = startRot + extraRot;
     const startTime = performance.now();
 
-    // Quintic ease-out
-    const ease = (t) => 1 - Math.pow(1 - t, 5);
+    const SPLIT = 0.72;
+    const FAST_SHARE = 0.88;
+
+    const ease = (t) => {
+      if (t <= SPLIT) {
+        const t1 = t / SPLIT;
+        const p = (1 - Math.cos(t1 * Math.PI)) / 2;
+        return p * FAST_SHARE;
+      } else {
+        const t2 = (t - SPLIT) / (1 - SPLIT);
+        const p = 1 - Math.pow(1 - t2, 4);
+        return FAST_SHARE + p * (1 - FAST_SHARE);
+      }
+    };
 
     const tick = (now) => {
       const t = Math.min((now - startTime) / duration, 1);
       this.rotation = startRot + (targetRot - startRot) * ease(t);
       this.draw(entries);
-
       if (t < 1) {
         this._animId = requestAnimationFrame(tick);
       } else {
@@ -220,75 +227,59 @@ class WheelRenderer {
     return this._running;
   }
 
-  // ── Private helpers ────────────────────────────────────────────────────────
-
-  _drawEmpty(ctx, cx, cy, r) {
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, TWO_PI);
-    ctx.fillStyle = "#ece8e0";
-    ctx.fill();
-    ctx.strokeStyle = "#d0ccc4";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.fillStyle = "#9a9794";
-    ctx.font = `14px ${SANS}`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText("No entries yet", cx, cy);
-  }
-
   _drawLabel(ctx, text, cx, cy, r, capR, arc, midAngle, bgColor) {
-    // ── Available space ──────────────────────────────────────────────────────
-    const PADDING_RADIAL = 12;
-    const PADDING_ANGULAR = 0.8; // use 80 % of chord as angular budget
+    const RADIAL_PAD = 10;
+    const ANGULAR_PAD = 0.82;
 
-    const textR = r - capR - PADDING_RADIAL; // radial length for text
-    if (textR < 8) return; // segment too thin
+    const innerR = capR + RADIAL_PAD;
+    const outerR = r - RADIAL_PAD;
+    const textR = outerR - innerR;
+    if (textR < 6) return;
 
-    const midR = (capR + r) / 2;
-    const chord = 2 * midR * Math.sin(arc / 2) * PADDING_ANGULAR;
-    if (chord < 5) return; // segment too narrow
+    const radialX = (innerR + outerR) / 2;
 
-    // ── Font-size search ─────────────────────────────────────────────────────
-    // No hard pixel cap: if space is available the text fills it naturally.
+    // True chord at radialX: hard angular-height budget for the text block
+    const chord = 2 * radialX * Math.sin(arc / 2) * ANGULAR_PAD;
+    if (chord < 4) return;
+
+    // Font-size: start from the space-driven ideal, cap at 26 px
     const MIN_FS = 7;
-    const MAX_FS = Math.min(
-      chord * 0.55, // up to 55 % of the angular chord per line
-      r * 0.18, // proportional to wheel radius
+    const MAX_FS = 26; // larger than original 18 px, still bounded
+    let fs = Math.min(
+      MAX_FS,
+      Math.max(MIN_FS, Math.min(chord * 0.9, textR * 0.55)),
     );
-
-    let fs = Math.max(MIN_FS, MAX_FS);
     let lines = [];
 
-    // Iterate: wrap → check height → reduce font if needed
-    for (let pass = 0; pass < 8; pass++) {
+    for (let pass = 0; pass < 12; pass++) {
       ctx.font = `600 ${fs}px ${SANS}`;
       lines = _wrapText(ctx, text, textR);
 
-      const lineH = fs * 1.3;
+      const lineH = fs * 1.25;
       const totalH = lines.length * lineH;
       const maxLineW = Math.max(...lines.map((l) => ctx.measureText(l).width));
 
-      const heightOk = totalH <= chord;
-      const widthOk = maxLineW <= textR;
+      if (totalH <= chord && maxLineW <= textR) break;
+      if (fs <= MIN_FS) break;
 
-      if (heightOk && widthOk) break; // fits
-
-      if (fs <= MIN_FS) break; // can't shrink further
-
-      // Shrink: the binding constraint drives the reduction factor
-      const hScale = heightOk ? 1 : chord / totalH;
-      const wScale = widthOk ? 1 : textR / maxLineW;
-      fs = Math.max(MIN_FS, fs * Math.min(hScale, wScale) * 0.92);
+      const hScale = chord / totalH;
+      const wScale = textR / maxLineW;
+      fs = Math.max(MIN_FS, fs * Math.min(hScale, wScale) * 0.9);
     }
 
-    // ── Draw ─────────────────────────────────────────────────────────────────
     const txtColor = _textColor(bgColor);
     const shColor = _shadowColor(bgColor);
-    const lineH = fs * 1.3;
-    const radialX = (capR + r) / 2; // radial centre of text block
+    const lineH = fs * 1.25;
 
     ctx.save();
+
+    // Hard clip: no pixel can ever bleed into a neighbouring segment
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, r, midAngle - arc / 2, midAngle + arc / 2);
+    ctx.closePath();
+    ctx.clip();
+
     ctx.translate(cx, cy);
     ctx.rotate(midAngle);
 
