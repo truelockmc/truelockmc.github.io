@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>OpenWheel</title>
+        <link rel="stylesheet" href="style.css" />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='%23cc4b15'/><circle cx='16' cy='16' r='4' fill='%23fff'/><line x1='16' y1='2' x2='16' y2='14' stroke='%23fff' stroke-width='2'/><line x1='16' y1='18' x2='16' y2='30' stroke='%23fff' stroke-width='2'/><line x1='2' y1='16' x2='14' y2='16' stroke='%23fff' stroke-width='2'/><line x1='18' y1='16' x2='30' y2='16' stroke='%23fff' stroke-width='2'/></svg>"
+        />
+    </head>
+    <body>
+        <div id="app">
+            <!-- Left sidebar: wheel list -->
+            <aside id="sidebar">
+                <div class="sidebar-top">
+                    <a href="#" class="logo">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                        >
+                            <circle
+                                cx="10"
+                                cy="10"
+                                r="9"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                            />
+                            <circle
+                                cx="10"
+                                cy="10"
+                                r="2.5"
+                                fill="currentColor"
+                            />
+                            <line
+                                x1="10"
+                                y1="1"
+                                x2="10"
+                                y2="7.5"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+                            <line
+                                x1="10"
+                                y1="12.5"
+                                x2="10"
+                                y2="19"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+                            <line
+                                x1="1"
+                                y1="10"
+                                x2="7.5"
+                                y2="10"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+                            <line
+                                x1="12.5"
+                                y1="10"
+                                x2="19"
+                                y2="10"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                        OpenWheel
+                    </a>
+                </div>
+                <div class="sidebar-section">
+                    <p class="sidebar-label">My Wheels</p>
+                    <nav id="wheel-list"></nav>
+                </div>
+                <div class="sidebar-bottom">
+                    <button id="new-wheel-btn" class="btn-new-wheel">
+                        <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 14 14"
+                            fill="none"
+                        >
+                            <line
+                                x1="7"
+                                y1="1"
+                                x2="7"
+                                y2="13"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+                            <line
+                                x1="1"
+                                y1="7"
+                                x2="13"
+                                y2="7"
+                                stroke="currentColor"
+                                stroke-width="1.5"
+                                stroke-linecap="round"
+                            />
+                        </svg>
+                        New wheel
+                    </button>
+                    <p class="sidebar-note">
+                        No tracking. Stored in your browser.
+                    </p>
+                </div>
+            </aside>
+
+            <!-- Centre: wheel canvas -->
+            <main id="main">
+                <div id="wheel-header">
+                    <div id="title-area"></div>
+                    <span id="entry-count"></span>
+                </div>
+                <div id="canvas-area">
+                    <div id="pointer-wrap"><div id="pointer"></div></div>
+                    <canvas id="wheel-canvas"></canvas>
+                </div>
+                <div id="spin-area">
+                    <button id="spin-btn" disabled>Spin</button>
+                    <p id="spin-note" class="note"></p>
+                </div>
+            </main>
+
+            <!-- Right panel: entries textarea -->
+            <aside id="panel">
+                <div class="panel-top">
+                    <p class="sidebar-label">Entries</p>
+                    <div class="panel-toolbar">
+                        <button
+                            id="shuffle-btn"
+                            class="tool-btn"
+                            title="Shuffle"
+                        >
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                            >
+                                <path
+                                    d="M1 4h2.5a4 4 0 0 1 3.2 1.6L8 7"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M1 12h2.5a4 4 0 0 0 3.2-1.6l3.6-4.8A4 4 0 0 1 13.5 4H15"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M13 2l2 2-2 2"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                                <path
+                                    d="M8 9l1.3 1.4A4 4 0 0 0 12.5 12H15"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M13 10l2 2-2 2"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                            Shuffle
+                        </button>
+                        <button id="sort-btn" class="tool-btn" title="Sort A–Z">
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                            >
+                                <line
+                                    x1="2"
+                                    y1="4"
+                                    x2="9"
+                                    y2="4"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                                <line
+                                    x1="2"
+                                    y1="8"
+                                    x2="7"
+                                    y2="8"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                                <line
+                                    x1="2"
+                                    y1="12"
+                                    x2="5"
+                                    y2="12"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                />
+                                <path
+                                    d="M12 3v8M10 9l2 2 2-2"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                            Sort
+                        </button>
+                        <button
+                            id="clear-btn"
+                            class="tool-btn tool-btn--danger"
+                            title="Clear all"
+                        >
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                            >
+                                <path
+                                    d="M3 4h10M6 4V3h4v1M5 4l.5 9h5L11 4"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
+                </div>
+                <textarea
+                    id="entries-textarea"
+                    placeholder="Type entries here, one per line:&#10;&#10;Alice&#10;Bob&#10;Charlie&#10;&#10;The wheel updates as you type."
+                    spellcheck="false"
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                ></textarea>
+            </aside>
+        </div>
+
+        <!-- Winner overlay -->
+        <div
+            id="winner-overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+        >
+            <canvas id="confetti-canvas"></canvas>
+            <div id="winner-modal">
+                <p class="winner-label">Winner</p>
+                <p id="winner-name"></p>
+                <div class="winner-actions">
+                    <button id="spin-again-btn" class="btn-primary">
+                        Spin again
+                    </button>
+                    <button id="close-winner-btn" class="btn-ghost">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- New wheel overlay -->
+        <div
+            id="new-wheel-overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+        >
+            <div id="new-wheel-modal">
+                <h2>New wheel</h2>
+                <form id="new-wheel-form">
+                    <input
+                        id="new-wheel-input"
+                        type="text"
+                        placeholder="Wheel name…"
+                        autocomplete="off"
+                    />
+                    <div class="modal-row">
+                        <button type="submit" class="btn-primary">
+                            Create
+                        </button>
+                        <button
+                            type="button"
+                            id="cancel-new-wheel"
+                            class="btn-ghost"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="js/storage.js"></script>
+        <script src="js/wheel.js"></script>
+        <script src="js/app.js"></script>
+    </body>
+</html>
