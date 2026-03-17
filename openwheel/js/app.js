@@ -263,7 +263,7 @@ els.shuffleBtn.addEventListener("click", () => {
   renderer.draw(entries());
 });
 
-// Sort A–Z
+// Sort A-Z
 els.sortBtn.addEventListener("click", () => {
   if (!data.activeId) return;
   data.wheels[data.activeId].entries = entries()

@@ -69,6 +69,15 @@ const PINNED = [
     ci: 0,
   },
   {
+    name: "openwheel",
+    url: "https://truelockmc.github.io/openwheel/",
+    title: "OpenWheel",
+    desc: "Wheelofnames but opensource and private. Multiple wheels, no tracking, everything saved in your browser.",
+    emoji: "&#x1F3A1;",
+    tag: "JS / Tool",
+    ci: 2,
+  },
+  {
     name: "games",
     url: "https://truelockmc.github.io/games/",
     title: "Games",

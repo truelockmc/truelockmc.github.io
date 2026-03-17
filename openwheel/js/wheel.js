@@ -72,7 +72,7 @@ class WheelRenderer {
     ctx.fill();
     ctx.restore();
 
-    // Cap radius — text starts just outside this
+    // Cap radius, text starts just outside this
     const capR = Math.max(12, r * 0.075);
 
     // Font size: generous when few entries, shrinks as n grows.
@@ -99,7 +99,7 @@ class WheelRenderer {
       ctx.lineWidth = 1.5;
       ctx.stroke();
 
-      // Label — radial, from centre outward
+      // Label, radial, from centre outward
       // Translate to centre, rotate to segment midpoint, then draw text
       // along the +x axis (which now points toward the segment midpoint).
       ctx.save();
