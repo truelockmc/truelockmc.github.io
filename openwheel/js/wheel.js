@@ -178,24 +178,26 @@ class WheelRenderer {
     if (this._running || entries.length < 2) return;
     this._running = true;
 
-    const extraRot = (6 + Math.random() * 8) * TWO_PI;
-    const duration = 3200 + Math.random() * 1800; // same as original
+    const extraRot = (14 + Math.random() * 6) * TWO_PI;
+    const duration = 7000 + Math.random() * 2000;
     const startRot = this.rotation;
     const targetRot = startRot + extraRot;
     const startTime = performance.now();
 
-    const SPLIT = 0.72;
-    const FAST_SHARE = 0.88;
+    const SPLIT = 0.05;
+    const FAST_SHARE = (2 * SPLIT) / (1 + SPLIT);
+    const K = 8; // higher = steeper drop = slower crawl at the end
+    const expDenom = 1 - Math.exp(-K);
 
     const ease = (t) => {
       if (t <= SPLIT) {
         const t1 = t / SPLIT;
-        const p = (1 - Math.cos(t1 * Math.PI)) / 2;
-        return p * FAST_SHARE;
+        return t1 * t1 * FAST_SHARE;
       } else {
         const t2 = (t - SPLIT) / (1 - SPLIT);
-        const p = 1 - Math.pow(1 - t2, 4);
-        return FAST_SHARE + p * (1 - FAST_SHARE);
+        return (
+          FAST_SHARE + ((1 - Math.exp(-K * t2)) / expDenom) * (1 - FAST_SHARE)
+        );
       }
     };
 
@@ -208,7 +210,8 @@ class WheelRenderer {
       } else {
         this.rotation = ((this.rotation % TWO_PI) + TWO_PI) % TWO_PI;
         this._running = false;
-        onDone(this._winner(entries));
+        // Brief still pause before showing the winner
+        setTimeout(() => onDone(this._winner(entries)), 600);
       }
     };
 
