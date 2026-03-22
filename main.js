@@ -381,9 +381,10 @@ async function loadContributions() {
       ),
     );
 
-    // Sort by stars descending
+    // Sort by stars descending, only show repos with more than 2 stars
     const repos = details
       .filter(Boolean)
+      .filter((r) => r.stargazers_count > 2)
       .sort((a, b) => b.stargazers_count - a.stargazers_count);
 
     const STAR_SVG =
