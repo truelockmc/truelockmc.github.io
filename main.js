@@ -78,6 +78,15 @@ const PINNED = [
     ci: 2,
   },
   {
+    name: "qr-gen",
+    url: "https://truelockmc.github.io/qr-gen/",
+    title: "QR Code Generator",
+    desc: "A simple QR-Code Generator, no Bloat and locally in your Browser.",
+    emoji: "&#x1F5B6;",
+    tag: "JS / Tool",
+    ci: 0,
+  },
+  {
     name: "games",
     url: "https://truelockmc.github.io/games/",
     title: "Games",
@@ -103,6 +112,7 @@ const EMOJIS = [
   "&#x1F4A1;",
   "&#x1F510;",
   "&#x1F5A5;",
+  "&#x1F5B6;",
 ];
 
 /* Language → colour map (GitHub colours) */

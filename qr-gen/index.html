@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>QR Code Generator</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>QR Code Generator</h1>
+
+            <div class="form-group">
+                <label for="qrInput">Text or URL:</label>
+                <input
+                    type="text"
+                    id="qrInput"
+                    placeholder="Enter your text or URL..."
+                    value="https://example.com"
+                />
+            </div>
+
+            <div class="form-group">
+                <label>Size:</label>
+                <select id="qrSize">
+                    <option value="200">Small (200x200px)</option>
+                    <option value="300" selected>Medium (300x300px)</option>
+                    <option value="400">Large (400x400px)</option>
+                    <option value="500">Extra Large (500x500px)</option>
+                    <option value="800">Huge (800x800px)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Error Correction:</label>
+                <select id="qrErrorCorrection">
+                    <option value="L">Low (7%)</option>
+                    <option value="M" selected>Medium (15%)</option>
+                    <option value="Q">Quartile (25%)</option>
+                    <option value="H">High (30%)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label
+                    >Padding (Controls the size of the white around the
+                    code):</label
+                >
+                <select id="qrPadding">
+                    <option value="10">Small (10px)</option>
+                    <option value="20" selected>Medium (20px)</option>
+                    <option value="30">Large (30px)</option>
+                    <option value="50">Extra Large (50px)</option>
+                </select>
+            </div>
+
+            <button onclick="generateQR()">Generate QR Code</button>
+
+            <div
+                class="preview-section"
+                id="previewSection"
+                style="display: none"
+            >
+                <h2>Preview</h2>
+                <canvas id="qrCanvas"></canvas>
+
+                <div class="download-buttons">
+                    <button class="download-btn" onclick="downloadPNG()">
+                        PNG
+                    </button>
+                    <button class="download-btn" onclick="downloadJPG()">
+                        JPG
+                    </button>
+                    <button class="download-btn" onclick="downloadSVG()">
+                        SVG
+                    </button>
+                    <button class="download-btn" onclick="downloadWEBP()">
+                        WebP
+                    </button>
+                </div>
+                <p class="info-text">Choose a format to download the QR code</p>
+            </div>
+        </div>
+
+        <script src="qrcode.min.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>
