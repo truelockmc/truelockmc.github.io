@@ -410,24 +410,13 @@ async function loadPages(repos) {
 }
 
 /* ── Load contributed-to repos ───────────────────────────── */
-async function loadContributions() {
+/* Uses only 2 API calls total: 1 search + 1 batch repo search,
+   instead of 1 search + N individual repo fetches               */
+async function loadContributions(contribData) {
   const list = document.getElementById("contrib-list");
 
   try {
-    // Search for all merged PRs by truelockmc on repos they don't own
-    const q = encodeURIComponent(
-      "type:pr author:truelockmc is:merged -user:truelockmc",
-    );
-    const searchUrl =
-      "https://api.github.com/search/issues?q=" +
-      q +
-      "&per_page=100&sort=updated";
-
-    const r = await fetch(searchUrl, {
-      headers: { Accept: "application/vnd.github+json" },
-    });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const data = await r.json();
+    const data = contribData || { items: [] };
 
     if (!data.items || data.items.length === 0) {
       list.innerHTML =
@@ -436,33 +425,40 @@ async function loadContributions() {
       return;
     }
 
-    // Deduplicate by repo, count PRs per repo
-    const repoMap = new Map();
+    // Deduplicate by repo slug, count PRs
+    const repoMap = new Map(); // "owner/repo" -> { count, repoUrl }
     for (const item of data.items) {
-      // item.repository_url = "https://api.github.com/repos/owner/name"
-      const repoUrl = item.repository_url;
-      if (!repoMap.has(repoUrl)) {
-        repoMap.set(repoUrl, { count: 1, repoUrl });
+      const slug = item.repository_url.replace("https://api.github.com/repos/", "");
+      if (!repoMap.has(slug)) {
+        repoMap.set(slug, { count: 1, repoUrl: item.repository_url });
       } else {
-        repoMap.get(repoUrl).count++;
+        repoMap.get(slug).count++;
       }
     }
 
-    // Fetch repo details in parallel
-    const entries = [...repoMap.values()];
-    const details = await Promise.all(
-      entries.map(({ repoUrl, count }) =>
-        fetch(repoUrl)
-          .then((r) =>
-            r.ok ? r.json().then((d) => ({ ...d, prCount: count })) : null,
-          )
-          .catch(() => null),
-      ),
+    // 1 call: batch-search all repos by name to get stars/language/description
+    // GitHub search lets us query up to ~20 repos in one go via "repo:o/r repo:o/r ..."
+    const slugs = [...repoMap.keys()];
+    const repoQuery = encodeURIComponent(
+      slugs.map((s) => "repo:" + s).join(" "),
     );
+    const repoSearchUrl =
+      "https://api.github.com/search/repositories?q=" +
+      repoQuery +
+      "&per_page=100";
+    const repoRes = await fetch(repoSearchUrl, {
+      headers: { Accept: "application/vnd.github+json" },
+    });
+    if (!repoRes.ok) throw new Error("HTTP " + repoRes.status);
+    const repoData = await repoRes.json();
 
-    // Sort by stars descending, only show repos with more than 2 stars
-    const repos = details
-      .filter(Boolean)
+    // Merge PR count into repo objects
+    const repos = (repoData.items || [])
+      .map((repo) => {
+        const slug = repo.full_name;
+        const prCount = repoMap.get(slug)?.count || 1;
+        return { ...repo, prCount };
+      })
       .filter((r) => r.stargazers_count > 2)
       .sort((a, b) => b.stargazers_count - a.stargazers_count);
 
@@ -557,14 +553,9 @@ async function loadContributions() {
 }
 
 /* ── Last worked on ─────────────────────────────────────── */
-async function loadLastWorkedOn() {
+function loadLastWorkedOn(events) {
   try {
-    const r = await fetch(
-      "https://api.github.com/users/truelockmc/events/public?per_page=30"
-    );
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    const events = await r.json();
-    const push = events.find((e) => e.type === "PushEvent");
+    const push = (events || []).find((e) => e.type === "PushEvent");
     if (!push) return;
     const repoName = push.repo.name;
     const shortName = repoName.split("/")[1];
@@ -581,14 +572,33 @@ async function loadLastWorkedOn() {
 }
 
 /* ── Bootstrap ───────────────────────────────────────────── */
+/* All network calls fire in parallel */
 (async function init() {
   try {
-    const repos = await fetchAllRepos();
+    // Fire all independent fetches at the same time
+    const [repos, events, contribData] = await Promise.all([
+      fetchAllRepos(),
+      fetch("https://api.github.com/users/truelockmc/events/public?per_page=30")
+        .then((r) => (r.ok ? r.json() : []))
+        .catch(() => []),
+      (async () => {
+        const q = encodeURIComponent(
+          "type:pr author:truelockmc is:merged -user:truelockmc",
+        );
+        const r = await fetch(
+          "https://api.github.com/search/issues?q=" + q + "&per_page=100&sort=updated",
+          { headers: { Accept: "application/vnd.github+json" } },
+        );
+        return r.ok ? r.json() : { items: [] };
+      })(),
+    ]);
+
+    // All render functions run in parallel once data is ready
     await Promise.all([
       loadTopRepos(repos),
       loadPages(repos),
-      loadContributions(),
-      loadLastWorkedOn(),
+      loadContributions(contribData),
+      loadLastWorkedOn(events),
     ]);
   } catch (err) {
     console.error(err);
