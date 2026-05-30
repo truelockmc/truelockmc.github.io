@@ -69,9 +69,9 @@
 :root {
     --bg: #080808;
     --surface: #111111;
-    --border: #222222;
+    --border: #2e2e2e;
     --text: #ede8df;
-    --muted: #5a5650;
+    --muted: #8c8680;
     --accent: #e8a020;
 }
 
