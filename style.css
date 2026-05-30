@@ -84,7 +84,7 @@ body {
     color: var(--text);
     font-family: "Syne", sans-serif;
     overflow-x: hidden;
-    cursor: none;
+    cursor: auto; /* custom cursor disabled, re-enable by restoring cursor:none and the #cursor / #cursor-ring divs in index.html */
 }
 
 /* ── Cursor ──────────────────────────────────────────────── */
