@@ -493,6 +493,33 @@ async function loadContributions() {
   }
 }
 
+/* ── Last worked on ─────────────────────────────────────── */
+async function loadLastWorkedOn() {
+  try {
+    const r = await fetch(
+      "https://api.github.com/users/truelockmc/events/public?per_page=30"
+    );
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const events = await r.json();
+
+    const push = events.find((e) => e.type === "PushEvent");
+    if (!push) return;
+
+    const repoName = push.repo.name;
+    const shortName = repoName.split("/")[1];
+    const url = "https://github.com/" + repoName;
+
+    const nameEl = document.getElementById("lwo-name");
+    const linkEl = document.getElementById("lwo-repo");
+    if (nameEl) nameEl.textContent = shortName;
+    if (linkEl) linkEl.href = url;
+  } catch (err) {
+    console.error("last-worked-on:", err);
+    const nameEl = document.getElementById("lwo-name");
+    if (nameEl) nameEl.textContent = "—";
+  }
+}
+
 /* ── Bootstrap ───────────────────────────────────────────── */
 (async function init() {
   try {
@@ -501,6 +528,7 @@ async function loadContributions() {
       loadTopRepos(repos),
       loadPages(repos),
       loadContributions(),
+      loadLastWorkedOn(),
     ]);
   } catch (err) {
     console.error(err);

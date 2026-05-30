@@ -1052,3 +1052,88 @@ footer {
         padding: 2rem 1.5rem;
     }
 }
+
+/* ── Last Worked On ──────────────────────────────────────── */
+.last-worked-on {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+.lwo-label {
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+}
+.lwo-repo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "DM Mono", monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem 0.25rem 0.6rem;
+    background: var(--surface);
+    transition: border-color 0.2s, color 0.2s;
+}
+.lwo-repo:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.lwo-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+}
+.lwo-arrow {
+    font-size: 0.8rem;
+    opacity: 0.5;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
+
+/* ── About Badges ────────────────────────────────────────── */
+.about-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+.about-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "DM Mono", monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.05);
+    transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+}
+.about-badge:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,160,32,0.08);
+    transform: translateY(-2px);
+}
+.about-badge svg {
+    width: 15px;
+    height: 15px;
+    fill: currentColor;
+    flex-shrink: 0;
+    opacity: 0.85;
+}
