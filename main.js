@@ -44,6 +44,69 @@ function wireCursor() {
 }
 wireCursor();
 
+/* ── ASCII Easter Egg ────────────────────────────────────── */
+(function() {
+  const art = [
+    "%c",
+    "  ████████╗██████╗ ██╗   ██╗███████╗",
+    "     ██╔══╝██╔══██╗██║   ██║██╔════╝",
+    "     ██║   ██████╔╝██║   ██║█████╗  ",
+    "     ██║   ██╔══██╗██║   ██║██╔══╝  ",
+    "     ██║   ██║  ██║╚██████╔╝███████╗",
+    "     ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚══════╝",
+    "",
+    "  ██╗      ██████╗  ██████╗██╗  ██╗",
+    "  ██║     ██╔═══██╗██╔════╝██║ ██╔╝",
+    "  ██║     ██║   ██║██║     █████╔╝ ",
+    "  ██║     ██║   ██║██║     ██╔═██╗ ",
+    "  ███████╗╚██████╔╝╚██████╗██║  ██╗",
+    "  ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝",
+    "",
+    "  // developer · privacy enthusiast · german guy",
+    "  // github.com/truelockmc",
+    "",
+  ].join("\n");
+  console.log(
+    art,
+    "color:#e8a020;font-family:monospace;font-size:12px;line-height:1.4"
+  );
+})();
+
+/* ── Typewriter effect ───────────────────────────────────── */
+(function() {
+  const text = "I build stuff and put it on the internet. Mostly Python, sometimes JavaScript, always open source.";
+  const el = document.getElementById("typewriter-text");
+  if (!el) return;
+  let i = 0;
+  // Wait for the hero fade-in animation (0.7s delay) before typing
+  setTimeout(function type() {
+    if (i <= text.length) {
+      el.textContent = text.slice(0, i);
+      i++;
+      setTimeout(type, i < 10 ? 60 : 28);
+    }
+  }, 900);
+})();
+
+/* ── Parallax hero grid ──────────────────────────────────── */
+(function() {
+  const grid = document.querySelector(".hero-grid-bg");
+  if (!grid) return;
+
+  // Mouse parallax
+  document.addEventListener("mousemove", (e) => {
+    const xPct = (e.clientX / window.innerWidth  - 0.5) * 18;
+    const yPct = (e.clientY / window.innerHeight - 0.5) * 18;
+    grid.style.transform = `translate(${xPct}px, ${yPct}px) scale(1.05)`;
+  });
+
+  // Scroll parallax
+  window.addEventListener("scroll", () => {
+    const y = window.scrollY * 0.25;
+    grid.style.backgroundPositionY = `-${y}px`;
+  }, { passive: true });
+})();
+
 /* ── Nav scroll ──────────────────────────────────────────── */
 window.addEventListener("scroll", () =>
   document.getElementById("nav").classList.toggle("scrolled", scrollY > 40),
@@ -501,14 +564,11 @@ async function loadLastWorkedOn() {
     );
     if (!r.ok) throw new Error("HTTP " + r.status);
     const events = await r.json();
-
     const push = events.find((e) => e.type === "PushEvent");
     if (!push) return;
-
     const repoName = push.repo.name;
     const shortName = repoName.split("/")[1];
     const url = "https://github.com/" + repoName;
-
     const nameEl = document.getElementById("lwo-name");
     const linkEl = document.getElementById("lwo-repo");
     if (nameEl) nameEl.textContent = shortName;

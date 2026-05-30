@@ -1053,6 +1053,25 @@ footer {
     }
 }
 
+/* ── Typewriter cursor ───────────────────────────────────── */
+.typewriter-cursor {
+    display: inline-block;
+    color: var(--accent);
+    font-weight: 300;
+    margin-left: 1px;
+    animation: blink 1s step-end infinite;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* ── Hero grid parallax ──────────────────────────────────── */
+.hero-grid-bg {
+    transition: transform 0.12s ease-out;
+    will-change: transform;
+}
+
 /* ── Last Worked On ──────────────────────────────────────── */
 .last-worked-on {
     display: flex;
@@ -1100,7 +1119,7 @@ footer {
 }
 @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
+    50%       { opacity: 0.35; }
 }
 
 /* ── About Badges ────────────────────────────────────────── */
