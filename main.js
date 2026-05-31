@@ -126,6 +126,13 @@ const obs = new IntersectionObserver(
 );
 document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
 
+/* ── Source link ─────────────────────────────────────────── */
+const IS_CODEBERG = window.location.hostname.includes("codeberg.page");
+const sourceLink = document.getElementById("source-link");
+if (sourceLink && IS_CODEBERG) {
+  sourceLink.href = "https://codeberg.org/truelockmc/truelockmc.codeberg.page";
+}
+
 /* ── Pinned page cards ───────────────────────────────────── */
 const PINNED = [
   {
