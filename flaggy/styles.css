@@ -1,13 +1,17 @@
 /* Base styles */
 :root {
-    --bg-color: #0a0a0a; /* Dunkel, fast schwarz */
-    --text-color: #00ff00; /* Leuchtendes grün (Terminal-Style) */
-    --card-bg: #121212; /* Dunkles Grau für Karten */
-    --card-shadow: rgba(0, 255, 0, 0.2); /* Grüne Schatten */
-    --link-color: #00ff00; /* Leuchtendes grün für Links */
-    --highlight-color: #ff0066; /* Neon Pink für Highlights */
-    --glow-color: rgba(0, 255, 0, 0.6); /* Grünes Leuchten */
-    --border-color: rgba(0, 255, 0, 0.3); /* Neon-grüner Rand */
+    --bg-color: #0a0a0a;
+    --text-color: #00ff00;
+    --card-bg: #121212;
+    --card-shadow: rgba(0, 255, 0, 0.2);
+    --link-color: #00ff00;
+    --highlight-color: #ff0066;
+    --glow-color: rgba(0, 255, 0, 0.6);
+    --border-color: rgba(0, 255, 0, 0.3);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
 body {
@@ -17,16 +21,19 @@ body {
     color: var(--text-color);
     transition: all 0.3s ease;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
 header {
-    padding: 3rem;
+    padding: 1.5rem 1rem;
     background-color: var(--card-bg);
     box-shadow: 0px 10px 30px var(--card-shadow);
-    margin-bottom: 4rem;
-    border-radius: 20px;
+    margin-bottom: 2rem;
+    border-radius: 0 0 20px 20px;
     position: relative;
     overflow: hidden;
     text-transform: uppercase;
@@ -34,7 +41,7 @@ header {
 
 header h1 {
     margin: 0;
-    font-size: 4rem;
+    font-size: clamp(2rem, 8vw, 4rem);
     letter-spacing: 0.05em;
     color: var(--highlight-color);
     text-shadow:
@@ -43,9 +50,9 @@ header h1 {
 }
 
 header p {
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 4vw, 1.5rem);
     color: var(--link-color);
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     letter-spacing: 0.03em;
     text-shadow:
         0 0 5px var(--glow-color),
@@ -54,82 +61,100 @@ header p {
 
 header small {
     display: block;
-    font-size: 1rem;
-    margin-top: 1rem;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
     color: var(--text-color);
     font-weight: 400;
     text-shadow: 0 0 5px var(--glow-color);
 }
 
+/* Main content */
+main {
+    flex: 1;
+    padding-bottom: 5rem;
+}
+
 /* Flag image container */
 #start-container {
     text-align: center;
-    padding: 40px 20px;
+    padding: 20px 16px;
+}
+
+#start-container h2 {
+    font-size: clamp(1.4rem, 5vw, 2.5rem);
 }
 
 #flag-image {
-    margin-top: 30px;
-    width: 80%;
-    max-width: 900px;
+    margin-top: 20px;
+    width: 90%;
+    max-width: 600px;
     box-shadow: 0px 8px 20px var(--glow-color);
-    border-radius: 15px;
+    border-radius: 12px;
     transition:
         transform 0.3s ease,
         box-shadow 0.3s ease;
 }
 
 #flag-image:hover {
-    transform: scale(1.05);
+    transform: scale(1.03);
     box-shadow: 0px 15px 30px var(--glow-color);
 }
 
 /* Buttons */
+#difficulty-buttons {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
 .difficulty-button {
     background-color: var(--link-color);
     color: var(--bg-color);
-    padding: 20px 40px;
-    margin: 15px;
+    padding: 16px 32px;
     border: 2px solid var(--border-color);
-    border-radius: 15px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: clamp(1rem, 4vw, 1.5rem);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-family: "Courier New", Courier, monospace;
     transition:
         background-color 0.3s,
-        transform 0.3s,
+        transform 0.2s,
         box-shadow 0.3s;
     box-shadow: 0 4px 8px var(--card-shadow);
+    min-width: 140px;
 }
 
 .difficulty-button:hover {
     background-color: var(--highlight-color);
     color: var(--bg-color);
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0px 8px 20px var(--glow-color);
 }
 
 .difficulty-button:active {
-    transform: scale(1);
-    box-shadow: 0px 4px 8px var(--card-shadow);
+    transform: scale(0.97);
 }
 
 /* Footer */
 footer {
-    position: absolute;
-    bottom: 10px;
+    position: relative;
     width: 100%;
     background-color: var(--card-bg);
     box-shadow: 0px -4px 15px var(--card-shadow);
-    padding: 20px 0;
+    padding: 16px 12px;
     text-align: center;
     color: var(--text-color);
-    font-size: 1.2rem;
+    font-size: 1rem;
+    margin-top: auto;
 }
 
 footer small {
     color: var(--highlight-color);
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-shadow:
         0 0 10px var(--highlight-color),
         0 0 20px var(--highlight-color);
@@ -138,32 +163,33 @@ footer small {
 /* Dark Mode Toggle */
 .dark-mode-toggle {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 12px;
+    right: 12px;
     background-color: var(--card-bg);
-    border: none;
+    border: 1px solid var(--border-color);
     color: var(--text-color);
-    font-size: 1.2rem;
-    padding: 10px 20px;
-    border-radius: 10px;
+    font-size: 0.85rem;
+    padding: 8px 14px;
+    border-radius: 8px;
     cursor: pointer;
+    font-family: "Courier New", Courier, monospace;
     box-shadow: 0px 5px 20px var(--glow-color);
     transition:
         background-color 0.3s ease,
         color 0.3s ease,
         box-shadow 0.3s ease;
+    z-index: 100;
 }
 
 .dark-mode-toggle:hover {
     background-color: var(--link-color);
     color: var(--bg-color);
-    box-shadow: 0px 5px 20px var(--glow-color);
 }
 
 /* Page Layout */
 h2 {
-    font-size: 2.5rem;
-    margin-top: 3rem;
+    font-size: clamp(1.4rem, 5vw, 2.5rem);
+    margin-top: 2rem;
     letter-spacing: 0.05em;
     color: var(--highlight-color);
     text-shadow:
@@ -171,24 +197,49 @@ h2 {
         0 0 20px var(--glow-color);
 }
 
-#difficulty-buttons {
-    margin-top: 30px;
-}
-
 #footer-links {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
+    gap: 12px;
+    margin-bottom: 8px;
 }
 
 #footer-links a {
     color: var(--link-color);
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 400;
 }
 
 #footer-links a:hover {
     text-decoration: underline;
     color: var(--highlight-color);
+}
+
+/* Mobile-specific */
+@media (max-width: 480px) {
+    header {
+        padding: 1rem 0.75rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .dark-mode-toggle {
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    #flag-image {
+        width: 95%;
+        border-radius: 8px;
+    }
+
+    .difficulty-button {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    footer {
+        padding: 12px 8px;
+    }
 }

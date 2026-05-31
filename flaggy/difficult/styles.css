@@ -19,6 +19,10 @@
     --incorrect-color: #ff7961;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: "Arial", sans-serif;
@@ -29,32 +33,35 @@ body {
 
 header {
     text-align: center;
-    padding: 2rem;
+    padding: 1rem;
     background-color: var(--card-bg);
     box-shadow: 0px 4px 8px var(--card-shadow);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
 }
 
 header p {
-    font-size: 1.2rem;
+    font-size: clamp(0.9rem, 3vw, 1.2rem);
     color: var(--link-color);
+    margin: 0.4rem 0 0;
 }
 
 #quiz-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    padding: 0 16px;
+    margin-top: 16px;
 }
 
 #flag-image-container {
-    width: 300px;
-    height: 200px;
+    width: min(300px, 85vw);
+    height: auto;
+    aspect-ratio: 3 / 2;
     margin-bottom: 20px;
 }
 
@@ -63,32 +70,49 @@ header p {
     height: 100%;
     object-fit: contain;
     border: 2px solid #ddd;
+    border-radius: 4px;
+}
+
+#answers-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 480px;
 }
 
 input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
+    padding: 10px 14px;
+    font-size: 16px; /* prevents iOS zoom */
     margin-bottom: 10px;
     border-radius: 5px;
     border: 1px solid #ddd;
-    width: 300px;
+    width: min(300px, 90vw);
     box-sizing: border-box;
 }
 
 .answer-button {
     background-color: #007bff;
     color: white;
-    padding: 10px 20px;
-    margin: 5px;
+    padding: 12px 18px;
+    margin: 0;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: clamp(0.85rem, 3vw, 1rem);
     transition: background-color 0.3s;
+    flex: 1 1 calc(50% - 8px);
+    min-width: 120px;
+    max-width: 220px;
 }
 
 .answer-button:hover {
     background-color: #0056b3;
+}
+
+.answer-button:active {
+    transform: scale(0.97);
 }
 
 .correct {
@@ -102,67 +126,94 @@ input[type="text"] {
 }
 
 .feedback {
-    font-size: 20px;
+    font-size: clamp(1rem, 4vw, 1.3rem);
     text-align: center;
-    margin-top: 20px;
+    margin-top: 16px;
     display: none;
+    padding: 0 12px;
 }
 
 .correct-feedback {
     color: var(--correct-color);
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
 }
 
 .wrong-feedback {
     color: var(--incorrect-color);
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
 }
 
 #score-container {
     display: flex;
     justify-content: center;
-    gap: 2rem;
+    gap: 1.5rem;
     margin-top: 20px;
+    flex-wrap: wrap;
+    padding: 0 12px;
 }
 
 #correct-score,
 #incorrect-score {
-    font-size: 1.2rem;
+    font-size: clamp(0.95rem, 3vw, 1.2rem);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .score-icon {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
 .top-controls {
     position: fixed;
-    top: 1rem;
-    right: 1rem;
+    top: 10px;
+    right: 10px;
     display: flex;
-    gap: 0.5rem;
+    gap: 6px;
     z-index: 100;
 }
 
 .dark-mode-toggle,
 .lang-toggle {
     background-color: var(--card-bg);
-    border: none;
+    border: 1px solid var(--card-shadow);
     color: var(--text-color);
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
+    font-size: clamp(0.75rem, 2.5vw, 1rem);
+    padding: 6px 10px;
     border-radius: 5px;
     cursor: pointer;
     box-shadow: 0px 4px 6px var(--card-shadow);
     transition:
         background-color 0.3s ease,
         color 0.3s ease;
+    white-space: nowrap;
 }
 
 .dark-mode-toggle:hover,
 .lang-toggle:hover {
     background-color: var(--link-color);
     color: var(--bg-color);
+}
+
+/* Mobile-specific */
+@media (max-width: 480px) {
+    header {
+        padding: 0.8rem 0.75rem;
+        margin-bottom: 1rem;
+    }
+
+    .top-controls {
+        top: 8px;
+        right: 8px;
+        gap: 4px;
+    }
+
+    .answer-button {
+        flex: 1 1 calc(50% - 4px);
+        padding: 12px 10px;
+    }
+
+    #score-container {
+        gap: 1rem;
+    }
 }
