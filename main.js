@@ -130,7 +130,7 @@ document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
 const PINNED = [
   {
     name: "flaggy",
-    url: "https://truelockmc.github.io/flaggy/",
+    url: "flaggy/",
     title: "Flaggy",
     desc: "A flag quiz I built to stop getting embarrassed at geography questions. Covers pretty much every country.",
     emoji: "&#x1F3F3;&#xFE0F;",
@@ -139,7 +139,7 @@ const PINNED = [
   },
   {
     name: "openwheel",
-    url: "https://truelockmc.github.io/openwheel/",
+    url: "openwheel/",
     title: "OpenWheel",
     desc: "Wheelofnames but opensource and private. Multiple wheels, no tracking, everything saved in your browser.",
     emoji: "&#x1F3A1;",
@@ -148,7 +148,7 @@ const PINNED = [
   },
   {
     name: "qr-gen",
-    url: "https://truelockmc.github.io/qr-gen/",
+    url: "qr-gen/",
     title: "QR Code Generator",
     desc: "A simple QR-Code Generator, no Bloat and locally in your Browser.",
     emoji: "&#x1F5B6;",
@@ -157,7 +157,7 @@ const PINNED = [
   },
   {
     name: "games",
-    url: "https://truelockmc.github.io/games/",
+    url: "games/",
     title: "Games",
     desc: "A small collection of browser games. Runs in the tab, no install needed.",
     emoji: "&#x1F579;&#xFE0F;",
@@ -390,7 +390,7 @@ async function loadPages(repos) {
     const cfg = {
       url: "https://truelockmc.github.io/" + repo.name + "/",
       title: repo.name.replace(/-/g, " "),
-      desc: repo.description || "A hosted page — click to explore.",
+      desc: repo.description || "A hosted page.",
       emoji: EMOJIS[idx % EMOJIS.length],
       ci: idx % 6,
       tag: (repo.language || "Web") + " &middot; GitHub Pages",
@@ -567,7 +567,7 @@ function loadLastWorkedOn(events) {
   } catch (err) {
     console.error("last-worked-on:", err);
     const nameEl = document.getElementById("lwo-name");
-    if (nameEl) nameEl.textContent = "—";
+    if (nameEl) nameEl.textContent = "-";
   }
 }
 
