@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Zeitungsartikel Generator</title>
+        <link rel="stylesheet" href="style.css" />
+        <!-- Bunny Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net" />
+        <link
+            href="https://fonts.bunny.net/css?family=playfair-display:700,900|source-serif-4:300,400,400i,600|barlow-condensed:600,700"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="app-layout">
+            <!-- LEFT: Editor Panel -->
+            <aside class="editor-panel">
+                <div class="editor-header">
+                    <span class="editor-label">Redaktion</span>
+                    <h1 class="editor-title">Artikel<br />Editor</h1>
+                </div>
+
+                <div class="editor-fields">
+                    <!-- Topbar Toggle -->
+                    <div class="field-group toggle-group">
+                        <label class="field-label">Kopfzeile</label>
+                        <div class="toggle-row">
+                            <span class="toggle-desc"
+                                >Zeitung / Datum / Ausgabe</span
+                            >
+                            <button
+                                class="toggle-btn"
+                                id="topbar-toggle"
+                                aria-pressed="true"
+                            >
+                                <span class="toggle-knob"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Topbar fields (only visible when toggled on) -->
+                    <div class="topbar-fields" id="topbar-fields">
+                        <div class="field-group">
+                            <label class="field-label" for="brand-name"
+                                >Zeitungsname</label
+                            >
+                            <input
+                                id="brand-name"
+                                class="field-input"
+                                type="text"
+                                placeholder="DIE TAGESPOST"
+                            />
+                        </div>
+                        <div class="field-group">
+                            <label class="field-label" for="edition-text"
+                                >Ausgabe</label
+                            >
+                            <input
+                                id="edition-text"
+                                class="field-input"
+                                type="text"
+                                placeholder="Nr. 42 · Lokalteil"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="headline"
+                            >Hauptüberschrift</label
+                        >
+                        <textarea
+                            id="headline"
+                            class="field-input field-textarea-small"
+                            placeholder="Seltsame Geschehnisse in Altbach..."
+                            rows="3"
+                        ></textarea>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="subheadline"
+                            >Rote Unterzeile</label
+                        >
+                        <input
+                            id="subheadline"
+                            class="field-input"
+                            type="text"
+                            placeholder="Eiskalte Verschwörung"
+                        />
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="author-name"
+                            >Autor Name</label
+                        >
+                        <input
+                            id="author-name"
+                            class="field-input"
+                            type="text"
+                            placeholder="Jakob Herm"
+                        />
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="image-caption"
+                            >Bildunterschrift</label
+                        >
+                        <input
+                            id="image-caption"
+                            class="field-input"
+                            type="text"
+                            placeholder="Foto: Archivbild von Herrn Habermas"
+                        />
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="article-text"
+                            >Artikeltext</label
+                        >
+                        <textarea
+                            id="article-text"
+                            class="field-input field-textarea-large"
+                            placeholder="Über die gestrige Nacht soll bei mehreren..."
+                            rows="8"
+                        ></textarea>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Artikelbild</label>
+                        <div class="upload-zone" id="upload-zone">
+                            <div class="upload-icon">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                >
+                                    <path
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                            </div>
+                            <span class="upload-text"
+                                >Bild hierher ziehen oder klicken</span
+                            >
+                            <input
+                                type="file"
+                                id="image-input"
+                                accept="image/*"
+                                hidden
+                            />
+                        </div>
+                        <div
+                            class="upload-preview"
+                            id="upload-preview"
+                            style="display: none"
+                        >
+                            <img id="preview-img" src="" alt="Vorschau" />
+                            <button class="remove-image" id="remove-image">
+                                Entfernen
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">Autorenbild</label>
+                        <div
+                            class="upload-zone upload-zone-small"
+                            id="author-upload-zone"
+                        >
+                            <div class="upload-icon">
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.5"
+                                >
+                                    <circle cx="12" cy="8" r="4" />
+                                    <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                                </svg>
+                            </div>
+                            <span class="upload-text">Autorenfoto</span>
+                            <input
+                                type="file"
+                                id="author-image-input"
+                                accept="image/*"
+                                hidden
+                            />
+                        </div>
+                        <div
+                            class="upload-preview upload-preview-small"
+                            id="author-upload-preview"
+                            style="display: none"
+                        >
+                            <img id="author-preview-img" src="" alt="Autor" />
+                            <button
+                                class="remove-image"
+                                id="remove-author-image"
+                            >
+                                ×
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="download-btn" id="download-btn">
+                        <span>Bild herunterladen</span>
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M12 4v12m0 0l-4-4m4 4l4-4M4 20h16" />
+                        </svg>
+                    </button>
+                </div>
+            </aside>
+
+            <!-- RIGHT: Live Preview -->
+            <main class="preview-area">
+                <div class="preview-label">Vorschau</div>
+
+                <div class="newspaper-frame" id="newspaper-frame">
+                    <div class="newspaper-inner" id="newspaper-inner">
+                        <!-- Top bar (toggelbar) -->
+                        <div class="np-topbar" id="np-topbar">
+                            <span class="np-brand" id="np-brand"
+                                >DIE TAGESPOST</span
+                            >
+                            <span class="np-date" id="np-date"></span>
+                            <span class="np-edition" id="np-edition"
+                                >Nr. 42 · Lokalteil</span
+                            >
+                        </div>
+
+                        <!-- Main headline -->
+                        <h2 class="np-headline" id="np-headline">
+                            Überschrift erscheint hier
+                        </h2>
+
+                        <!-- Red subheadline -->
+                        <p class="np-subheadline" id="np-subheadline">
+                            Unterzeile
+                        </p>
+
+                        <!-- Article image -->
+                        <div class="np-image-wrap" id="np-image-wrap">
+                            <div
+                                class="np-image-placeholder"
+                                id="np-image-placeholder"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1"
+                                >
+                                    <rect
+                                        x="3"
+                                        y="3"
+                                        width="18"
+                                        height="18"
+                                        rx="1"
+                                    />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <path d="M21 15l-5-5L5 21" />
+                                </svg>
+                                <span>Kein Bild geladen</span>
+                            </div>
+                            <img
+                                class="np-image"
+                                id="np-image"
+                                src=""
+                                alt=""
+                                style="display: none"
+                            />
+                        </div>
+                        <p class="np-image-caption" id="np-image-caption">
+                            Foto: Archivbild
+                        </p>
+
+                        <!-- Author row -->
+                        <div class="np-author-row" id="np-author-row">
+                            <div class="np-author-avatar" id="np-author-avatar">
+                                <img
+                                    id="np-author-img"
+                                    src=""
+                                    alt=""
+                                    style="display: none"
+                                />
+                                <div
+                                    class="np-author-initial"
+                                    id="np-author-initial"
+                                >
+                                    J
+                                </div>
+                            </div>
+                            <span class="np-author-name" id="np-author-name"
+                                >Autor Name</span
+                            >
+                        </div>
+
+                        <!-- Article body -->
+                        <p class="np-body" id="np-body">
+                            Der Artikeltext wird hier angezeigt.
+                        </p>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
