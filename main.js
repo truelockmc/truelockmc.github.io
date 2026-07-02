@@ -45,7 +45,7 @@ function wireCursor() {
 wireCursor();
 
 /* ── ASCII Easter Egg ────────────────────────────────────── */
-(function() {
+(function () {
   const art = [
     "%c",
     "  ████████╗██████╗ ██╗   ██╗███████╗",
@@ -68,13 +68,14 @@ wireCursor();
   ].join("\n");
   console.log(
     art,
-    "color:#e8a020;font-family:monospace;font-size:12px;line-height:1.4"
+    "color:#e8a020;font-family:monospace;font-size:12px;line-height:1.4",
   );
 })();
 
 /* ── Typewriter effect ───────────────────────────────────── */
-(function() {
-  const text = "I build stuff and put it on the internet. Mostly Python, sometimes JavaScript, always open source.";
+(function () {
+  const text =
+    "I build stuff and put it on the internet. Mostly Python, sometimes JavaScript, always open source.";
   const el = document.getElementById("typewriter-text");
   if (!el) return;
   let i = 0;
@@ -89,22 +90,26 @@ wireCursor();
 })();
 
 /* ── Parallax hero grid ──────────────────────────────────── */
-(function() {
+(function () {
   const grid = document.querySelector(".hero-grid-bg");
   if (!grid) return;
 
   // Mouse parallax
   document.addEventListener("mousemove", (e) => {
-    const xPct = (e.clientX / window.innerWidth  - 0.5) * 18;
+    const xPct = (e.clientX / window.innerWidth - 0.5) * 18;
     const yPct = (e.clientY / window.innerHeight - 0.5) * 18;
     grid.style.transform = `translate(${xPct}px, ${yPct}px) scale(1.05)`;
   });
 
   // Scroll parallax
-  window.addEventListener("scroll", () => {
-    const y = window.scrollY * 0.25;
-    grid.style.backgroundPositionY = `-${y}px`;
-  }, { passive: true });
+  window.addEventListener(
+    "scroll",
+    () => {
+      const y = window.scrollY * 0.25;
+      grid.style.backgroundPositionY = `-${y}px`;
+    },
+    { passive: true },
+  );
 })();
 
 /* ── Nav scroll ──────────────────────────────────────────── */
@@ -435,7 +440,10 @@ async function loadContributions(contribData) {
     // Deduplicate by repo slug, count PRs
     const repoMap = new Map(); // "owner/repo" -> { count, repoUrl }
     for (const item of data.items) {
-      const slug = item.repository_url.replace("https://api.github.com/repos/", "");
+      const slug = item.repository_url.replace(
+        "https://api.github.com/repos/",
+        "",
+      );
       if (!repoMap.has(slug)) {
         repoMap.set(slug, { count: 1, repoUrl: item.repository_url });
       } else {
@@ -593,7 +601,9 @@ function loadLastWorkedOn(events) {
           "type:pr author:truelockmc is:merged -user:truelockmc",
         );
         const r = await fetch(
-          "https://api.github.com/search/issues?q=" + q + "&per_page=100&sort=updated",
+          "https://api.github.com/search/issues?q=" +
+            q +
+            "&per_page=100&sort=updated",
           { headers: { Accept: "application/vnd.github+json" } },
         );
         return r.ok ? r.json() : { items: [] };

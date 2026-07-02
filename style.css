@@ -1062,8 +1062,13 @@ footer {
     animation: blink 1s step-end infinite;
 }
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0; }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
 }
 
 /* ── Hero grid parallax ──────────────────────────────────── */
@@ -1099,7 +1104,9 @@ footer {
     border-radius: 20px;
     padding: 0.25rem 0.75rem 0.25rem 0.6rem;
     background: var(--surface);
-    transition: border-color 0.2s, color 0.2s;
+    transition:
+        border-color 0.2s,
+        color 0.2s;
 }
 .lwo-repo:hover {
     border-color: var(--accent);
@@ -1118,8 +1125,13 @@ footer {
     opacity: 0.5;
 }
 @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.35; }
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
 }
 
 /* ── About Badges ────────────────────────────────────────── */
@@ -1137,16 +1149,20 @@ footer {
     letter-spacing: 0.08em;
     color: var(--text);
     text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.12);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 6px;
     padding: 0.5rem 1rem;
-    background: rgba(255,255,255,0.05);
-    transition: border-color 0.2s, color 0.2s, background 0.2s, transform 0.15s;
+    background: rgba(255, 255, 255, 0.05);
+    transition:
+        border-color 0.2s,
+        color 0.2s,
+        background 0.2s,
+        transform 0.15s;
 }
 .about-badge:hover {
     border-color: var(--accent);
     color: var(--accent);
-    background: rgba(232,160,32,0.08);
+    background: rgba(232, 160, 32, 0.08);
     transform: translateY(-2px);
 }
 .about-badge svg {
